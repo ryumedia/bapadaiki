@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promo Bundling Roti Daiki x Kopi Bapa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .carousel-container {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+        
+        .carousel-slide {
+            min-width: 100%;
+            flex-shrink: 0;
+        }
+        
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .dot.active {
+            background-color: #ff6b35;
+            transform: scale(1.2);
+        }
+        
+        .promo-button {
+            animation: pulse-zoom 2s infinite;
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            box-shadow: 0 8px 32px rgba(255, 107, 53, 0.4);
+        }
+        
+        @keyframes pulse-zoom {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+        
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .popup-content {
+            background: white;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        .popup-header {
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            font-size: 24px;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .close-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
+        }
+        
+        .countdown-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+        
+        .countdown-item {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 15px 10px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .hero-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.1)"/><circle cx="10" cy="60" r="0.5" fill="rgba(255,255,255,0.1)"/><circle cx="90" cy="40" r="0.5" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+        
+
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="hero-bg text-white py-8 relative">
+        <div class="container mx-auto px-4 text-center relative z-10">
+            <div class="mb-6">
+                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiw3gq3zQJK_-oayf6T9IDrfhfM0LGD05kLpPlHZuVs3P7SWg9qGFtWdhtXxb2VSqkwesgqhdwaRxoKw0p4k-G-JEsySw9lAY8U68CdMlsLiyyO4HtLm71WG_fkqUM6DGAOmRGZ1o8f37NdZramA0DrVefFUcSYUYFcZFmFxz1wWr7l89Vo4wYThYZjnb8/s1426/Logo%20Daiki%20x%20Bapa.png" 
+                     alt="Logo Roti Daiki x Kopi Bapa" 
+                     class="mx-auto h-32 md:h-36 object-contain"
+                     onerror="this.src=''; this.alt='Logo gagal dimuat'; this.style.display='none';">
+            </div>
+            
+            <p class="text-base md:text-xl mb-3 font-semibold">
+                Promo Berakhir Pada :
+            </p>
+            
+            <!-- Countdown Timer -->
+            <div class="countdown-box">
+                <div class="grid grid-cols-4 gap-3 max-w-md mx-auto">
+                    <div class="countdown-item">
+                        <div id="days" class="text-2xl md:text-3xl font-bold text-white">00</div>
+                        <div class="text-xs md:text-sm text-gray-200 mt-1">Hari</div>
+                    </div>
+                    <div class="countdown-item">
+                        <div id="hours" class="text-2xl md:text-3xl font-bold text-white">00</div>
+                        <div class="text-xs md:text-sm text-gray-200 mt-1">Jam</div>
+                    </div>
+                    <div class="countdown-item">
+                        <div id="minutes" class="text-2xl md:text-3xl font-bold text-white">00</div>
+                        <div class="text-xs md:text-sm text-gray-200 mt-1">Menit</div>
+                    </div>
+                    <div class="countdown-item">
+                        <div id="seconds" class="text-2xl md:text-3xl font-bold text-white">00</div>
+                        <div class="text-xs md:text-sm text-gray-200 mt-1">Detik</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CTA Button -->
+            <div class="mt-6">
+                <a href="https://forms.fillout.com/t/qhWpsXXzhPus" target="_blank"
+                   class="inline-block promo-button text-white font-bold py-4 px-8 rounded-full text-lg md:text-xl transform transition-all duration-300 hover:scale-105 hover:shadow-2xl">
+                    🎉 Ambil Promo Sekarang 🎉
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Carousel Section -->
+    <section class="py-8 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="carousel-container bg-gradient-to-br from-purple-100 to-blue-100 rounded-2xl shadow-2xl overflow-hidden max-w-md mx-auto relative">
+                <!-- Navigation Arrows -->
+                <button onclick="prevSlide()" class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full p-2 shadow-lg z-10 transition-all duration-300">
+                    <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                </button>
+                <button onclick="nextSlide()" class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full p-2 shadow-lg z-10 transition-all duration-300">
+                    <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </button>
+                
+                <div class="carousel-track" id="carouselTrack">
+                    <div class="carousel-slide">
+                        <div class="flex items-center justify-center p-4" style="height: 280px;">
+                            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhEhlb0C4mkxOL4k5US-2V7GEwxZumvFQYw8PbgY2jPCfaP2gGTjT1FLFRJgDM4vq93JgZgW7OERL-t1ZkYZE0Xd1uiqybdbSg-GrgC4K8H5CFHpb-H083KLQaJ6hxx-MLIoG1AlO3x_8ohkEtB_BVSV1BowcS4ME2s2Mg2dQxXNky9wYvafx75i-oC_r8/s1500/cemen.png" 
+                                 alt="Paket Promo 1" 
+                                 class="max-w-full max-h-full object-contain cursor-pointer hover:opacity-80 transition-opacity duration-300"
+                                 onclick="openImagePopup(this.src, this.alt)"
+                                 onerror="this.src=''; this.alt='Gambar gagal dimuat'; this.style.display='none';">
+                        </div>
+                    </div>
+                    <div class="carousel-slide">
+                        <div class="flex items-center justify-center p-4" style="height: 280px;">
+                            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg7JOh5eEIbYouT963N4MsnG9JD1DRw3RO_YOMAQ_TWOCvX-St9CtUj15ET59qYYJZ7yRfcU_VylnnuCIbDEXjXRUqyjhINSZ3n_vxZe6mtBpj5wHCIdj_eO1ogfd_eYRC_C1Y4jZ9C-S80LG7qQ9R5Ei5-FtCg9qCg4r468VzmGr-FCcY_w9Xl_saQ7HM/s1500/Gentelman.png" 
+                                 alt="Paket Promo 2" 
+                                 class="max-w-full max-h-full object-contain cursor-pointer hover:opacity-80 transition-opacity duration-300"
+                                 onclick="openImagePopup(this.src, this.alt)"
+                                 onerror="this.src=''; this.alt='Gambar gagal dimuat'; this.style.display='none';">
+                        </div>
+                    </div>
+                    <div class="carousel-slide">
+                        <div class="flex items-center justify-center p-4" style="height: 280px;">
+                            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi2B94gVcdt14g1nzgsglKa5mstBVmcEKfMVdlkklM_z-ggJKG49eyz1apAflzFGsMCAWIqnK-c6wyFkvbeMqPRQ-g1DcH-zQJflxEpP81-BY5-H6NBh75kgi4TByR7IfZlCJPYzr8QI-jFOBsUcZFpQlH6ExkXYn1IdLO2RcUrhEBTAtAcWq-hfWvHHQo/s1500/superman.png" 
+                                 alt="Paket Promo 3" 
+                                 class="max-w-full max-h-full object-contain cursor-pointer hover:opacity-80 transition-opacity duration-300"
+                                 onclick="openImagePopup(this.src, this.alt)"
+                                 onerror="this.src=''; this.alt='Gambar gagal dimuat'; this.style.display='none';">
+                        </div>
+                    </div>
+                    <div class="carousel-slide">
+                        <div class="flex items-center justify-center p-4" style="height: 280px;">
+                            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjIUhk_WctAJnqgyVNf48trzD26yoV-WT3j5jXngfTE50SVHifn6dKpWBwjzhg-oF07k_dEkrlrJlp4Jys9kXsFUVz7AZg7LathyphenhyphenCyMCX0DKWRn_OK9bZj7hB6z7ZZuICq_TIBmiD3j_oan_12tCFcklKZDzJpn-ougnjwI-7rBzP4l6AGkmXsvIxvGi14/s1500/ultraman.png" 
+                                 alt="Paket Promo 4" 
+                                 class="max-w-full max-h-full object-contain cursor-pointer hover:opacity-80 transition-opacity duration-300"
+                                 onclick="openImagePopup(this.src, this.alt)"
+                                 onerror="this.src=''; this.alt='Gambar gagal dimuat'; this.style.display='none';">
+                        </div>
+                    </div>
+                    <div class="carousel-slide">
+                        <div class="flex items-center justify-center p-4" style="height: 280px;">
+                            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiqoaHkZpB7dZW386p5tbmj7e4ZAGsZJqjvdZpiGKQVyr3C7EByMdZCM1YZkYEmwVDkRCNv9yjAfoX0gsQYygmWHx_ICqkLiK0dgvM1dL5Mthouk96OshB_SOOiEDaNqbkbwS3yI3OyLzit1kQJ5Mne9Dr8q1aREIcFAh9Yz7wyz8R7l3fcRnkcv_qSacc/s1500/ultraman%20coklat.png" 
+                                 alt="Paket Promo 5" 
+                                 class="max-w-full max-h-full object-contain cursor-pointer hover:opacity-80 transition-opacity duration-300"
+                                 onclick="openImagePopup(this.src, this.alt)"
+                                 onerror="this.src=''; this.alt='Gambar gagal dimuat'; this.style.display='none';">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Click Instruction -->
+                <div class="text-center py-2 bg-gradient-to-r from-purple-200 to-blue-200">
+                    <p class="text-sm text-gray-600 font-medium">📸 Klik gambar untuk memperbesar</p>
+                </div>
+                
+                <!-- Dots Indicator -->
+                <div class="flex justify-center space-x-2 py-3 bg-gradient-to-r from-purple-200 to-blue-200">
+                    <div class="dot active" onclick="goToSlide(0)"></div>
+                    <div class="dot" onclick="goToSlide(1)"></div>
+                    <div class="dot" onclick="goToSlide(2)"></div>
+                    <div class="dot" onclick="goToSlide(3)"></div>
+                    <div class="dot" onclick="goToSlide(4)"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-6">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-sm">Hak Cipta : Ryumedia</p>
+        </div>
+    </footer>
+
+    <!-- Image Popup Overlay -->
+    <div id="imagePopupOverlay" class="popup-overlay">
+        <div class="relative max-w-4xl max-h-full p-4">
+            <button onclick="closeImagePopup()" class="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-10 h-10 flex items-center justify-center text-xl font-bold z-10 transition-colors duration-300">×</button>
+            <img id="popupImage" src="" alt="" class="max-w-full max-h-full object-contain rounded-lg shadow-2xl">
+        </div>
+    </div>
+
+
+
+
+    <script>
+        // Countdown Timer
+        function updateCountdown() {
+            const targetDate = new Date('2025-08-09T12:00:00+07:00').getTime();
+            const now = new Date().getTime();
+            const difference = targetDate - now;
+
+            if (difference > 0) {
+                const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+                document.getElementById('days').textContent = days.toString().padStart(2, '0');
+                document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+                document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+                document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+            } else {
+                document.getElementById('days').textContent = '00';
+                document.getElementById('hours').textContent = '00';
+                document.getElementById('minutes').textContent = '00';
+                document.getElementById('seconds').textContent = '00';
+            }
+        }
+
+        // Carousel functionality
+        let currentSlide = 0;
+        const totalSlides = 5;
+        const track = document.getElementById('carouselTrack');
+        const dots = document.querySelectorAll('.dot');
+
+        function updateCarousel() {
+            track.style.transform = `translateX(-${currentSlide * 100}%)`;
+            
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+        }
+
+        function goToSlide(slideIndex) {
+            currentSlide = slideIndex;
+            updateCarousel();
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateCarousel();
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            updateCarousel();
+        }
+
+        // Image popup functionality
+        function openImagePopup(src, alt) {
+            const popup = document.getElementById('imagePopupOverlay');
+            const img = document.getElementById('popupImage');
+            img.src = src;
+            img.alt = alt;
+            popup.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeImagePopup() {
+            document.getElementById('imagePopupOverlay').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close popups when clicking outside
+        document.getElementById('imagePopupOverlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeImagePopup();
+            }
+        });
+
+        // Initialize countdown
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+
+        // Initialize carousel
+        updateCarousel();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96b9e863f1dde78d',t:'MTc1NDYwMjU2OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
