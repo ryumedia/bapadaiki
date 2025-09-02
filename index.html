@@ -309,12 +309,12 @@ const firebaseConfig = {
             productList.innerHTML = '';
             products.forEach(product => {
                 const productCard = document.createElement('div');
-                productCard.className = 'p-4 bg-amber-100 dark:bg-neutral-700 rounded-lg shadow-sm flex items-center justify-between';
+                productCard.className = 'p-4 bg-amber-100 dark:bg-neutral-700 rounded-lg shadow-sm flex flex-col';
                 
                 const quantity = cart[product.id] ? cart[product.id].quantity : 0;
                 
                 productCard.innerHTML = `
-                    <div class="flex items-center">
+                    <div class="flex items-center mb-4">
                         <img src="${product.imageUrl}" alt="Gambar ${product.name}" class="w-20 h-20 rounded-lg object-cover mr-4"/>
                         <div class="flex-grow">
                             <p class="font-semibold text-lg">${product.name}</p>
@@ -322,7 +322,7 @@ const firebaseConfig = {
                             <p class="font-bold text-base mt-1">Rp ${product.price.toLocaleString('id-ID')}</p>
                         </div>
                     </div>
-                    <div class="flex items-center space-x-2 ml-4">
+                    <div class="flex justify-center items-center space-x-2">
                         <button data-id="${product.id}" class="minus-button bg-neutral-200 dark:bg-neutral-600 text-gray-800 dark:text-gray-200 font-semibold py-1 px-3 rounded-full transition-colors duration-200 shadow-sm">
                             -
                         </button>
@@ -420,7 +420,7 @@ const firebaseConfig = {
             if (paymentMethod === 'QRIS') {
                 content = `
                     <p class="font-bold text-lg mb-2">Scan untuk Bayar</p>
-                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhjRWu6LKcdUq0Gy-6EdRwIOTAcG3xbG9GHVe8oqZU86kmZOJDspYyu1XSUJW4uClqOV0Tq_n-UI0Votuu1c_TmtQR44cC_Bb2a2_GWYdGzZ3cHFbe1DXxbI0JIWIPEPtpnYisyN7Dy0MWB5smEEhhBEkAVsB9QMX2dszttN532FLcE-kD7_SLbnx1yPnU/s614/QRIS%20DAIKI.jpg" alt="QRIS Code" class="w-[200px] h-auto rounded-lg mx-auto" />
+                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhjRWu6LKcdUq0Gy-6EdRwIOTAcG3xbG9GHVe8oqZU86kmZOJDspYyu1XSUJW4uClqOV0Tq_n-UI0Votuu1c_TmtQR44cC_Bb2a2_GWYdGzZ3cHFbe1DXxbI0JIWIPEPtpnYisyN7Dy0MWB5smEEhhBEkAVsB9QMX2dszttN532FLcE-kD7_SLbnx1yPnU/s614/QRIS%20DAIKI.jpg" alt="QRIS Code" class="w-full h-auto max-w-[200px] mx-auto rounded-lg" />
                 `;
             } else if (paymentMethod === 'Transfer') {
                 content = `
