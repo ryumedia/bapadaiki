@@ -62,28 +62,22 @@
         </div>
     </div>
     
-    <!-- General Alert Modal -->
-    <div id="alert-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden modal-overlay">
-        <div class="bg-white dark:bg-stone-800 p-8 rounded-xl shadow-2xl w-full max-w-sm mx-4 text-center">
-            <h3 class="text-xl font-bold mb-4" id="alert-message-title">Peringatan</h3>
-            <p class="mb-6" id="alert-message-text"></p>
-            <button id="close-alert-modal" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold py-2 px-4 rounded-md">Tutup</button>
-        </div>
-    </div>
-
     <script type="module">
         // Import Firebase libraries
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, query, onSnapshot, updateDoc, doc, where, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, query, onSnapshot, updateDoc, doc, where, getDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // Global variables provided by the Canvas environment
         const appId = 'default-app-id'; // This ID is used for the database path and should be a unique identifier for your app
 
+        // =======================================================================================
         // PASTE KONFIGURASI FIREBASE ANDA DI SINI
-        // Ganti objek di bawah ini dengan konfigurasi Firebase pribadi Anda dari konsol Firebase.
-        // Hapus baris 'const firebaseConfig = ...' yang ada di sini jika Anda sudah menempelkannya.
-        const firebaseConfig = {
+        // PENTING: Ganti objek 'firebaseConfig' di bawah ini dengan konfigurasi pribadi Anda
+        // dari konsol Firebase. Ini adalah penyebab error yang Anda alami.
+        // =======================================================================================
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
   apiKey: "AIzaSyDO6OaqmYpAWfOmtsRg_g1yC_WO2J2gXOI",
   authDomain: "test-project-dc4c4.firebaseapp.com",
   projectId: "test-project-dc4c4",
@@ -92,6 +86,7 @@
   appId: "1:42493897694:web:a29260c37485c02ccb8b4f",
   measurementId: "G-3BDGHJR2LT"
 };
+        // =======================================================================================
         
         const initialAuthToken = null; // Ini hanya digunakan untuk lingkungan khusus
 
@@ -118,6 +113,7 @@
 
         // Hardcoded product data with coffee variant options
         const products = [
+            // Perbaikan URL untuk PAKET CEMEN
             { id: '1', name: 'PAKET CEMEN', price: 17500, description: 'Kopi 200ml, 1 Mini Cheese', imageUrl: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjpSsaw3HnXAhY9Cp1rGm8kAl9ugaAbSSpGiMJUE78D8Hx4P67gTFq5cRLB93SeWzkq_SMiv90U1zfwxY9AqCxLEGWhQsZLWdCINW5ZHIichh6PN2k9aCa7c1LrjbeHihZKgCLUNkpH_TZQ9mV2q8zBrkllLnROOSHilbHp_T1IIrxUZCTuXrsyFV69QIU/s1500/3.png', hasCoffee: true, rotiItems: [{ name: 'Mini Cheese', qty: 1 }] },
             { id: '2', name: 'PAKET GENTLEMENT', price: 22500, description: 'Kopi 200ml, 1 Mini Cheese, 1 Mini Choco', imageUrl: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjbNsBOvaQxhzAm5_bR25btq2sUC-l2_CDM078Kof5SrAPpmv3vMKUTuPMDXL84C53826k3Y3nNjkA3RwgtqZm2YTWU1Uz-KzNR6O3E9LkfMhC2C8jzTYj3BUUa4Riofdn8gddCioEGtHy9Q4LuWV5OFbtfFeYzKtXsPJ08aWHtl0bN5cANtBnDRoRqiso/s1500/4.png', hasCoffee: true, rotiItems: [{ name: 'Mini Cheese', qty: 1 }, { name: 'Mini Choco', qty: 1 }] },
             { id: '3', name: 'PAKET SUPERMAN', price: 29000, description: 'Kopi 200ml, 1 Big Cheese', imageUrl: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjU3OSJXskAwgPj27p7qPdkh5g2dUTC45A-5MnyHP9ivkq54aO41gJV-wPU7Q_5H8mLcXah0dMB8WbBW2RTpHnWSzDGUCBRwG9d5MOMuq4prOaeH-uTkSkv7rL5Jn41va3EqWqmTPjE44bAdN2VVsCjSjHZZf_BlvBWfOdlwA0Okofn9j672RzpgDsn9rY/s1500/5.png', hasCoffee: true, rotiItems: [{ name: 'Big Cheese', qty: 1 }] },
@@ -142,21 +138,12 @@
             'Transfer',
             'QRIS'
         ];
-        
-        function showAlert(message) {
-            const alertModal = document.getElementById('alert-modal');
-            const alertMessageText = document.getElementById('alert-message-text');
-            const closeAlertModalButton = document.getElementById('close-alert-modal');
-            alertMessageText.textContent = message;
-            alertModal.classList.remove('hidden');
-            closeAlertModalButton.onclick = () => alertModal.classList.add('hidden');
-        }
 
         // Function to initialize Firebase
         async function initializeFirebase() {
             try {
                 if (!firebaseConfig.apiKey || firebaseConfig.apiKey.startsWith('...')) {
-                    showAlert("Kesalahan: Anda belum memasukkan konfigurasi Firebase Anda. Silakan ikuti petunjuk di dalam kode.");
+                    console.error("Kesalahan: Anda belum memasukkan konfigurasi Firebase Anda. Silakan ikuti petunjuk di dalam kode.");
                     return;
                 }
                 
@@ -167,7 +154,9 @@
                 onAuthStateChanged(auth, async (user) => {
                     if (user) {
                         userId = user.uid;
+                        await loadCartFromFirebase(); // Load the cart first
                         renderCustomerView();
+                        listenForUserOrdersCount(); // Listen for order count on page load
                         console.log("Pengguna terotentikasi:", userId);
                     } else {
                         console.log("Pengguna tidak terotentikasi, mencoba masuk secara anonim atau dengan token.");
@@ -179,13 +168,11 @@
                             }
                         } catch (error) {
                             console.error("Gagal masuk:", error);
-                            showAlert("Kesalahan otentikasi. Silakan coba muat ulang.");
                         }
                     }
                 });
             } catch (e) {
                 console.error("Gagal menginisialisasi Firebase:", e);
-                showAlert("Kesalahan: Gagal menginisialisasi Firebase. Pastikan konfigurasi Anda benar.");
             }
         }
 
@@ -193,8 +180,9 @@
         function renderCustomerView() {
             uiContent.innerHTML = `
                 <div class="flex justify-between mb-4">
-                    <button id="user-orders-button" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-3 rounded-full transition-colors duration-200 shadow-md flex items-center justify-center">
+                    <button id="user-orders-button" class="relative bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-3 rounded-full transition-colors duration-200 shadow-md flex items-center justify-center">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path fill-rule="evenodd" d="M7.5 6v.75H5.513c-.96 0-1.75.79-1.75 1.75v10.5c0 .96.79 1.75 1.75 1.75h12.974c.96 0 1.75-.79 1.75-1.75V8.513c0-.96-.79-1.75-1.75-1.75H16.5V6a4.5 4.5 0 10-9 0zm1.5.75v-2.25a3 3 0 116 0v2.25H9zm.75 4.5a.75.75 0 01.75-.75h2.25a.75.75 0 010 1.5H10.5a.75.75 0 01-.75-.75zm.75 2.25a.75.75 0 000 1.5h2.25a.75.75 0 000-1.5H10.5z" clip-rule="evenodd" /></svg>
+                        <span id="orders-badge" class="absolute -top-1 -right-1 flex items-center justify-center h-5 w-5 rounded-full bg-red-500 text-xs font-bold text-white leading-none"></span>
                     </button>
                     <button id="admin-mode-button" class="bg-amber-600 hover:bg-amber-700 text-white font-semibold py-2 px-3 rounded-full transition-colors duration-200 shadow-md flex items-center justify-center">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
@@ -411,6 +399,7 @@
                                         cart[productId].variants = new Array(cart[productId].quantity).fill(coffeeVariants[0]);
                                     }
                                     cart[productId].variants[i] = e.target.value;
+                                    saveCartToFirebase();
                                 });
                                 variantContainer.appendChild(selectElement);
                             }
@@ -448,7 +437,7 @@
         }
         
         // --- Data & Interaction Functions ---
-        function incrementQuantity(event) {
+        async function incrementQuantity(event) {
             const productId = event.target.dataset.id;
             const product = products.find(p => p.id === productId);
             if (cart[productId]) {
@@ -470,12 +459,13 @@
                     cart[productId].variants.push(coffeeVariants[0]);
                 }
             }
-
+            
+            await saveCartToFirebase();
             renderProductList(); // Re-render product list to update quantity display
             renderCart();
         }
 
-        function decrementQuantity(event) {
+        async function decrementQuantity(event) {
             const productId = event.target.dataset.id;
             const product = products.find(p => p.id === productId);
             if (cart[productId]) {
@@ -487,8 +477,54 @@
                     cart[productId].variants.pop();
                 }
             }
+
+            await saveCartToFirebase();
             renderProductList(); // Re-render product list to update quantity display
             renderCart();
+        }
+
+        // New function to reset the form and cart UI
+        function resetFormAndCart() {
+            cart = {};
+            document.getElementById('customer-name-input').value = '';
+            document.getElementById('customer-wa-input').value = '';
+            renderProductList();
+            renderCart();
+        }
+
+        async function saveCartToFirebase() {
+            if (!userId) {
+                console.error("User ID tidak tersedia.");
+                return;
+            }
+            const cartDocRef = doc(db, `/artifacts/${appId}/users/${userId}/cart/current`);
+            try {
+                if (Object.keys(cart).length === 0) {
+                    // If cart is empty, delete the document
+                    await deleteDoc(cartDocRef);
+                } else {
+                    await setDoc(cartDocRef, { cartData: cart });
+                }
+                console.log("Keranjang berhasil disimpan ke Firebase.");
+            } catch (e) {
+                console.error("Gagal menyimpan keranjang:", e);
+            }
+        }
+
+        async function loadCartFromFirebase() {
+            if (!userId) return;
+            const cartDocRef = doc(db, `/artifacts/${appId}/users/${userId}/cart/current`);
+            try {
+                const docSnap = await getDoc(cartDocRef);
+                if (docSnap.exists()) {
+                    cart = docSnap.data().cartData;
+                    console.log("Keranjang berhasil dimuat dari Firebase.");
+                } else {
+                    console.log("Tidak ada data keranjang di Firebase.");
+                }
+            } catch (e) {
+                console.error("Gagal memuat keranjang:", e);
+            }
         }
 
 
@@ -498,11 +534,11 @@
             const paymentMethod = document.getElementById('payment-method-input').value;
 
             if (Object.keys(cart).length === 0) {
-                showAlert("Keranjang Anda kosong. Silakan tambahkan produk.");
+                console.error("Keranjang kosong.");
                 return;
             }
             if (!customerName || !customerWa) {
-                showAlert("Silakan lengkapi Nama Pemesan dan Nomor WA.");
+                console.error("Nama atau Nomor WA tidak boleh kosong.");
                 return;
             }
 
@@ -520,15 +556,13 @@
             try {
                 const ordersCollectionPath = `/artifacts/${appId}/public/data/orders`;
                 await addDoc(collection(db, ordersCollectionPath), order);
-                cart = {}; // Clear cart
-                document.getElementById('customer-name-input').value = '';
-                document.getElementById('customer-wa-input').value = '';
-                renderCart();
-                renderProductList();
-                showAlert("Pesanan berhasil dibuat! Admin akan segera menghubungi Anda.");
+                console.log("Pesanan berhasil dibuat!");
+                await deleteDoc(doc(db, `/artifacts/${appId}/users/${userId}/cart/current`));
             } catch (e) {
                 console.error("Gagal membuat pesanan:", e);
-                showAlert("Gagal membuat pesanan. Silakan coba lagi.");
+            } finally {
+                // This block will always run, whether the `try` succeeds or the `catch` handles an error
+                resetFormAndCart(); 
             }
         }
 
@@ -711,6 +745,26 @@
         }
         
         // --- User Order History Functions ---
+        function listenForUserOrdersCount() {
+            if (!userId) {
+                console.error("User ID tidak tersedia.");
+                return;
+            }
+            const ordersCollectionPath = `/artifacts/${appId}/public/data/orders`;
+            const q = query(collection(db, ordersCollectionPath), where("customerId", "==", userId));
+
+            onSnapshot(q, (snapshot) => {
+                const ordersBadge = document.getElementById('orders-badge');
+                if (snapshot.empty) {
+                    ordersBadge.textContent = '0';
+                    ordersBadge.classList.add('hidden');
+                } else {
+                    ordersBadge.textContent = snapshot.size;
+                    ordersBadge.classList.remove('hidden');
+                }
+            });
+        }
+        
         async function listenForUserOrders() {
             const userOrdersList = document.getElementById('user-orders-list');
             if (!userId) {
