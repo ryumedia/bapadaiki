@@ -3,382 +3,770 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Promo Bundling Roti Daiki x Kopi Bapa</title>
+    <title>Aplikasi Pemesanan Kopi x Roti</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap');
-        
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Inter', sans-serif;
         }
-        
-        .carousel-container {
-            position: relative;
-            overflow: hidden;
+        .modal-overlay {
+            background-color: rgba(0, 0, 0, 0.5);
         }
-        
-        .carousel-track {
-            display: flex;
-            transition: transform 0.5s ease-in-out;
-        }
-        
-        .carousel-slide {
-            min-width: 100%;
-            flex-shrink: 0;
-        }
-        
-        .dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.5);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .dot.active {
-            background-color: #ff6b35;
-            transform: scale(1.2);
-        }
-        
-        .promo-button {
-            animation: pulse-zoom 2s infinite;
-            background: linear-gradient(45deg, #ff6b35, #f7931e);
-            box-shadow: 0 8px 32px rgba(255, 107, 53, 0.4);
-        }
-        
-        @keyframes pulse-zoom {
-            0%, 100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.05);
-            }
-        }
-        
-        .popup-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        
-        .popup-content {
-            background: white;
-            border-radius: 20px;
-            width: 100%;
-            max-width: 500px;
-            max-height: 90vh;
-            overflow: hidden;
-            position: relative;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        }
-        
-        .popup-header {
-            background: linear-gradient(45deg, #ff6b35, #f7931e);
-            color: white;
-            padding: 20px;
-            text-align: center;
-            position: relative;
-        }
-        
-        .close-btn {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            color: white;
-            font-size: 24px;
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
-        
-        .close-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: rotate(90deg);
-        }
-        
-        .countdown-box {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 15px;
-            padding: 20px;
-            margin: 20px 0;
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
-        }
-        
-        .countdown-item {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            border-radius: 10px;
-            padding: 15px 10px;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .hero-bg {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .hero-bg::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.1)"/><circle cx="10" cy="60" r="0.5" fill="rgba(255,255,255,0.1)"/><circle cx="90" cy="40" r="0.5" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-            opacity: 0.3;
-        }
-        
-
     </style>
 </head>
-<body class="bg-gray-50">
-    <!-- Header -->
-    <header class="hero-bg text-white py-8 relative">
-        <div class="container mx-auto px-4 text-center relative z-10">
-            <div class="mb-6">
-                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiw3gq3zQJK_-oayf6T9IDrfhfM0LGD05kLpPlHZuVs3P7SWg9qGFtWdhtXxb2VSqkwesgqhdwaRxoKw0p4k-G-JEsySw9lAY8U68CdMlsLiyyO4HtLm71WG_fkqUM6DGAOmRGZ1o8f37NdZramA0DrVefFUcSYUYFcZFmFxz1wWr7l89Vo4wYThYZjnb8/s1426/Logo%20Daiki%20x%20Bapa.png" 
-                     alt="Logo Roti Daiki x Kopi Bapa" 
-                     class="mx-auto h-32 md:h-36 object-contain"
-                     onerror="this.src=''; this.alt='Logo gagal dimuat'; this.style.display='none';">
-            </div>
-            
-            <p class="text-base md:text-xl mb-3 font-semibold">
-                Promo Berakhir Pada :
-            </p>
-            
-            <!-- Countdown Timer -->
-            <div class="countdown-box">
-                <div class="grid grid-cols-4 gap-3 max-w-md mx-auto">
-                    <div class="countdown-item">
-                        <div id="days" class="text-2xl md:text-3xl font-bold text-white">00</div>
-                        <div class="text-xs md:text-sm text-gray-200 mt-1">Hari</div>
-                    </div>
-                    <div class="countdown-item">
-                        <div id="hours" class="text-2xl md:text-3xl font-bold text-white">00</div>
-                        <div class="text-xs md:text-sm text-gray-200 mt-1">Jam</div>
-                    </div>
-                    <div class="countdown-item">
-                        <div id="minutes" class="text-2xl md:text-3xl font-bold text-white">00</div>
-                        <div class="text-xs md:text-sm text-gray-200 mt-1">Menit</div>
-                    </div>
-                    <div class="countdown-item">
-                        <div id="seconds" class="text-2xl md:text-3xl font-bold text-white">00</div>
-                        <div class="text-xs md:text-sm text-gray-200 mt-1">Detik</div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- CTA Button -->
-            <div class="mt-6">
-                <a href="https://forms.fillout.com/t/qhWpsXXzhPus" target="_blank"
-                   class="inline-block promo-button text-white font-bold py-4 px-8 rounded-full text-lg md:text-xl transform transition-all duration-300 hover:scale-105 hover:shadow-2xl">
-                    🎉 Ambil Promo Sekarang 🎉
-                </a>
-            </div>
-        </div>
-    </header>
+<body class="bg-amber-50 dark:bg-stone-900 flex flex-col items-center justify-center min-h-screen p-4 text-gray-900 dark:text-gray-100">
 
-    <!-- Carousel Section -->
-    <section class="py-8 bg-white">
-        <div class="container mx-auto px-4">
-            <div class="carousel-container bg-gradient-to-br from-purple-100 to-blue-100 rounded-2xl shadow-2xl overflow-hidden max-w-md mx-auto relative">
-                <!-- Navigation Arrows -->
-                <button onclick="prevSlide()" class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full p-2 shadow-lg z-10 transition-all duration-300">
-                    <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                    </svg>
-                </button>
-                <button onclick="nextSlide()" class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full p-2 shadow-lg z-10 transition-all duration-300">
-                    <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                    </svg>
-                </button>
-                
-                <div class="carousel-track" id="carouselTrack">
-                    <div class="carousel-slide">
-                        <div class="flex items-center justify-center p-4" style="height: 280px;">
-                            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhEhlb0C4mkxOL4k5US-2V7GEwxZumvFQYw8PbgY2jPCfaP2gGTjT1FLFRJgDM4vq93JgZgW7OERL-t1ZkYZE0Xd1uiqybdbSg-GrgC4K8H5CFHpb-H083KLQaJ6hxx-MLIoG1AlO3x_8ohkEtB_BVSV1BowcS4ME2s2Mg2dQxXNky9wYvafx75i-oC_r8/s1500/cemen.png" 
-                                 alt="Paket Promo 1" 
-                                 class="max-w-full max-h-full object-contain cursor-pointer hover:opacity-80 transition-opacity duration-300"
-                                 onclick="openImagePopup(this.src, this.alt)"
-                                 onerror="this.src=''; this.alt='Gambar gagal dimuat'; this.style.display='none';">
-                        </div>
-                    </div>
-                    <div class="carousel-slide">
-                        <div class="flex items-center justify-center p-4" style="height: 280px;">
-                            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg7JOh5eEIbYouT963N4MsnG9JD1DRw3RO_YOMAQ_TWOCvX-St9CtUj15ET59qYYJZ7yRfcU_VylnnuCIbDEXjXRUqyjhINSZ3n_vxZe6mtBpj5wHCIdj_eO1ogfd_eYRC_C1Y4jZ9C-S80LG7qQ9R5Ei5-FtCg9qCg4r468VzmGr-FCcY_w9Xl_saQ7HM/s1500/Gentelman.png" 
-                                 alt="Paket Promo 2" 
-                                 class="max-w-full max-h-full object-contain cursor-pointer hover:opacity-80 transition-opacity duration-300"
-                                 onclick="openImagePopup(this.src, this.alt)"
-                                 onerror="this.src=''; this.alt='Gambar gagal dimuat'; this.style.display='none';">
-                        </div>
-                    </div>
-                    <div class="carousel-slide">
-                        <div class="flex items-center justify-center p-4" style="height: 280px;">
-                            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi2B94gVcdt14g1nzgsglKa5mstBVmcEKfMVdlkklM_z-ggJKG49eyz1apAflzFGsMCAWIqnK-c6wyFkvbeMqPRQ-g1DcH-zQJflxEpP81-BY5-H6NBh75kgi4TByR7IfZlCJPYzr8QI-jFOBsUcZFpQlH6ExkXYn1IdLO2RcUrhEBTAtAcWq-hfWvHHQo/s1500/superman.png" 
-                                 alt="Paket Promo 3" 
-                                 class="max-w-full max-h-full object-contain cursor-pointer hover:opacity-80 transition-opacity duration-300"
-                                 onclick="openImagePopup(this.src, this.alt)"
-                                 onerror="this.src=''; this.alt='Gambar gagal dimuat'; this.style.display='none';">
-                        </div>
-                    </div>
-                    <div class="carousel-slide">
-                        <div class="flex items-center justify-center p-4" style="height: 280px;">
-                            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjIUhk_WctAJnqgyVNf48trzD26yoV-WT3j5jXngfTE50SVHifn6dKpWBwjzhg-oF07k_dEkrlrJlp4Jys9kXsFUVz7AZg7LathyphenhyphenCyMCX0DKWRn_OK9bZj7hB6z7ZZuICq_TIBmiD3j_oan_12tCFcklKZDzJpn-ougnjwI-7rBzP4l6AGkmXsvIxvGi14/s1500/ultraman.png" 
-                                 alt="Paket Promo 4" 
-                                 class="max-w-full max-h-full object-contain cursor-pointer hover:opacity-80 transition-opacity duration-300"
-                                 onclick="openImagePopup(this.src, this.alt)"
-                                 onerror="this.src=''; this.alt='Gambar gagal dimuat'; this.style.display='none';">
-                        </div>
-                    </div>
-                    <div class="carousel-slide">
-                        <div class="flex items-center justify-center p-4" style="height: 280px;">
-                            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiqoaHkZpB7dZW386p5tbmj7e4ZAGsZJqjvdZpiGKQVyr3C7EByMdZCM1YZkYEmwVDkRCNv9yjAfoX0gsQYygmWHx_ICqkLiK0dgvM1dL5Mthouk96OshB_SOOiEDaNqbkbwS3yI3OyLzit1kQJ5Mne9Dr8q1aREIcFAh9Yz7wyz8R7l3fcRnkcv_qSacc/s1500/ultraman%20coklat.png" 
-                                 alt="Paket Promo 5" 
-                                 class="max-w-full max-h-full object-contain cursor-pointer hover:opacity-80 transition-opacity duration-300"
-                                 onclick="openImagePopup(this.src, this.alt)"
-                                 onerror="this.src=''; this.alt='Gambar gagal dimuat'; this.style.display='none';">
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Click Instruction -->
-                <div class="text-center py-2 bg-gradient-to-r from-purple-200 to-blue-200">
-                    <p class="text-sm text-gray-600 font-medium">📸 Klik gambar untuk memperbesar</p>
-                </div>
-                
-                <!-- Dots Indicator -->
-                <div class="flex justify-center space-x-2 py-3 bg-gradient-to-r from-purple-200 to-blue-200">
-                    <div class="dot active" onclick="goToSlide(0)"></div>
-                    <div class="dot" onclick="goToSlide(1)"></div>
-                    <div class="dot" onclick="goToSlide(2)"></div>
-                    <div class="dot" onclick="goToSlide(3)"></div>
-                    <div class="dot" onclick="goToSlide(4)"></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-
-
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-6">
-        <div class="container mx-auto px-4 text-center">
-            <p class="text-sm">Hak Cipta : Ryumedia</p>
-        </div>
-    </footer>
-
-    <!-- Image Popup Overlay -->
-    <div id="imagePopupOverlay" class="popup-overlay">
-        <div class="relative max-w-4xl max-h-full p-4">
-            <button onclick="closeImagePopup()" class="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-10 h-10 flex items-center justify-center text-xl font-bold z-10 transition-colors duration-300">×</button>
-            <img id="popupImage" src="" alt="" class="max-w-full max-h-full object-contain rounded-lg shadow-2xl">
+    <!-- Main Application Container -->
+    <div id="app-container" class="bg-white dark:bg-stone-800 p-8 rounded-xl shadow-lg w-full max-w-lg">
+        <!-- The UI will be dynamically rendered here by JavaScript -->
+        <div id="ui-content" class="min-h-[400px]">
+            <p class="text-center text-gray-500 dark:text-gray-400">Memuat antarmuka pengguna...</p>
         </div>
     </div>
 
+    <!-- Modal Login Admin (hidden by default) -->
+    <div id="admin-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden modal-overlay">
+        <div class="bg-white dark:bg-stone-800 p-8 rounded-xl shadow-2xl w-full max-w-sm mx-4">
+            <h2 class="text-2xl font-bold text-center mb-4">Masuk sebagai Admin</h2>
+            <div class="space-y-4">
+                <div>
+                    <label for="admin-id-input" class="block text-sm font-medium mb-1">ID Admin:</label>
+                    <input type="text" id="admin-id-input" class="w-full p-2 rounded-md border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100" placeholder="Admin" />
+                </div>
+                <div>
+                    <label for="admin-code-input" class="block text-sm font-medium mb-1">Kode Admin:</label>
+                    <input type="password" id="admin-code-input" class="w-full p-2 rounded-md border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100" placeholder="****" />
+                </div>
+                <div id="login-message" class="text-sm text-center"></div>
+                <button id="login-submit-button" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold py-2 px-4 rounded-md transition-colors duration-200">
+                    Masuk
+                </button>
+                <button id="close-admin-modal" class="w-full bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-md transition-colors duration-200">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
 
+    <!-- Modal User Orders (hidden by default) -->
+    <div id="user-orders-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden modal-overlay">
+        <div class="bg-white dark:bg-stone-800 p-8 rounded-xl shadow-2xl w-full max-w-lg mx-4 max-h-[80vh] overflow-y-auto">
+            <h2 class="text-2xl font-bold text-center mb-4">Riwayat Pesanan Anda</h2>
+            <div id="user-orders-list" class="space-y-4 mb-4">
+                <p class="text-center text-gray-500 dark:text-gray-400">Memuat riwayat pesanan...</p>
+            </div>
+            <button id="close-user-orders-modal" class="w-full bg-neutral-800 hover:bg-neutral-900 text-white font-semibold py-2 px-4 rounded-md transition-colors duration-200">
+                Tutup
+            </button>
+        </div>
+    </div>
+    
+    <script type="module">
+        // Import Firebase libraries
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, query, onSnapshot, updateDoc, doc, where, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
+        // Global variables provided by the Canvas environment
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
 
-    <script>
-        // Countdown Timer
-        function updateCountdown() {
-            const targetDate = new Date('2025-08-09T12:00:00+07:00').getTime();
-            const now = new Date().getTime();
-            const difference = targetDate - now;
+        // Hardcoded admin credentials for demonstration
+        const ADMIN_ID = 'Admin';
+        const ADMIN_CODE = '4567';
 
-            if (difference > 0) {
-                const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+        // Get DOM elements
+        const appContainer = document.getElementById('app-container');
+        const uiContent = document.getElementById('ui-content');
+        const adminModal = document.getElementById('admin-modal');
+        const adminIdInput = document.getElementById('admin-id-input');
+        const adminCodeInput = document.getElementById('admin-code-input');
+        const loginSubmitButton = document.getElementById('login-submit-button');
+        const loginMessage = document.getElementById('login-message');
+        const closeAdminModalButton = document.getElementById('close-admin-modal');
+        const userOrdersModal = document.getElementById('user-orders-modal');
+        const closeUserOrdersModalButton = document.getElementById('close-user-orders-modal');
 
-                document.getElementById('days').textContent = days.toString().padStart(2, '0');
-                document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
-                document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
-                document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
-            } else {
-                document.getElementById('days').textContent = '00';
-                document.getElementById('hours').textContent = '00';
-                document.getElementById('minutes').textContent = '00';
-                document.getElementById('seconds').textContent = '00';
+        let app, db, auth;
+        let userId = null;
+        let isAdminMode = false;
+        let activeAdminTab = 'orders'; // 'orders' or 'recap'
+        let cart = {};
+
+        // Hardcoded product data with coffee variant options
+        const products = [
+            { id: '1', name: 'PAKET CEMEN', price: 17500, description: 'Kopi 200ml, 1 Mini Cheese', imageUrl: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjpSsaw3HnXAhY9Cp1rGm8kAl9ugaAbSSpGiMJUE78D8Hx4P67gTFq5cRLB93SeWzkq_SMiv90U1zfwxY9AqCxLEGWhQsZLWdCINW5ZHIichh6PN2k9aCa7c1LrjbeHihZKgCLUNkpH_TZQ9mV2q8zBrkllLnROOSHilbHp_T1IIrxUZCTuXrsyFV69QIU/s1500/3.png', hasCoffee: true, rotiItems: [{ name: 'Mini Cheese', qty: 1 }] },
+            { id: '2', name: 'PAKET GENTLEMENT', price: 22500, description: 'Kopi 200ml, 1 Mini Cheese, 1 Mini Choco', imageUrl: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjbNsBOvaQxhzAm5_bR25btq2sUC-l2_CDM078Kof5SrAPpmv3vMKUTuPMDXL84C53826k3Y3nNjkA3RwgtqZm2YTWU1Uz-KzNR6O3E9LkfMhC2C8jzTYj3BUUa4Riofdn8gddCioEGtHy9Q4LuWV5OFbtfFeYzKtXsPJ08aWHtl0bN5cANtBnDRoRqiso/s1500/4.png', hasCoffee: true, rotiItems: [{ name: 'Mini Cheese', qty: 1 }, { name: 'Mini Choco', qty: 1 }] },
+            { id: '3', name: 'PAKET SUPERMAN', price: 29000, description: 'Kopi 200ml, 1 Big Cheese', imageUrl: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjU3OSJXskAwgPj27p7qPdkh5g2dUTC45A-5MnyHP9ivkq54aO41gJV-wPU7Q_5H8mLcXah0dMB8WbBW2RTpHnWSzDGUCBRwG9d5MOMuq4prOaeH-uTkSkv7rL5Jn41va3EqWqmTPjE44bAdN2VVsCjSjHZZf_BlvBWfOdlwA0Okofn9j672RzpgDsn9rY/s1500/5.png', hasCoffee: true, rotiItems: [{ name: 'Big Cheese', qty: 1 }] },
+            { id: '4', name: 'PAKET ULTRAMAN', price: 47000, description: 'Kopi 200ml, 1 Big Cheese, 1 Big Choco', imageUrl: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhNljFwDudPcKbiDziJMei2Vl7_fGeH7s9zAXY6SJ6iN-iR7I7rGHlQi-p5f97v7MKMknhL7tHvuHht4BsSvi_wjQv_GT9TDAMIr4NI5NX_ozbRoczpb6abeGHkygQwpuZcZtPaQd9M_iQ-OFxlYNKOo_mwREzSVty2thu_oTxjRyPuplW-WyKQE4nikLA/s1500/6.png', hasCoffee: true, rotiItems: [{ name: 'Big Cheese', qty: 1 }, { name: 'Big Choco', qty: 1 }] },
+        ];
+
+        // Coffee variants as provided by the user
+        const coffeeVariants = [
+            'Original Latte',
+            'Aren creamy latte',
+            'Butterscotch',
+            'Caramel',
+            'Hazelnut',
+            'Bettersweet',
+            'Americano',
+            'Lemonade'
+        ];
+
+        // Payment methods as requested by the user
+        const paymentMethods = [
+            'Tunai',
+            'Transfer',
+            'QRIS'
+        ];
+
+        // Function to initialize Firebase
+        async function initializeFirebase() {
+            try {
+                if (Object.keys(firebaseConfig).length > 0) {
+                    app = initializeApp(firebaseConfig);
+                    db = getFirestore(app);
+                    auth = getAuth(app);
+                    onAuthStateChanged(auth, async (user) => {
+                        if (user) {
+                            userId = user.uid;
+                            renderCustomerView(); // Start with customer view
+                            console.log("Pengguna terotentikasi:", userId);
+                        } else {
+                            console.log("Pengguna tidak terotentikasi, mencoba masuk secara anonim atau dengan token.");
+                            try {
+                                if (initialAuthToken) {
+                                    await signInWithCustomToken(auth, initialAuthToken);
+                                } else {
+                                    await signInAnonymously(auth);
+                                }
+                            } catch (error) {
+                                console.error("Gagal masuk:", error);
+                                uiContent.innerHTML = `<p class="text-center text-red-500">Kesalahan otentikasi. Silakan coba muat ulang.</p>`;
+                            }
+                        }
+                    });
+                } else {
+                    console.error("Firebase config tidak tersedia.");
+                    uiContent.innerHTML = `<p class="text-center text-red-500">Kesalahan: Konfigurasi Firebase tidak ditemukan.</p>`;
+                }
+            } catch (e) {
+                console.error("Gagal menginisialisasi Firebase:", e);
+                uiContent.innerHTML = `<p class="text-center text-red-500">Kesalahan: Gagal menginisialisasi Firebase.</p>`;
             }
         }
 
-        // Carousel functionality
-        let currentSlide = 0;
-        const totalSlides = 5;
-        const track = document.getElementById('carouselTrack');
-        const dots = document.querySelectorAll('.dot');
+        // --- View Rendering Functions ---
+        function renderCustomerView() {
+            uiContent.innerHTML = `
+                <div class="flex justify-between mb-4">
+                    <button id="user-orders-button" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-3 rounded-full transition-colors duration-200 shadow-md flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path fill-rule="evenodd" d="M7.5 6v.75H5.513c-.96 0-1.75.79-1.75 1.75v10.5c0 .96.79 1.75 1.75 1.75h12.974c.96 0 1.75-.79 1.75-1.75V8.513c0-.96-.79-1.75-1.75-1.75H16.5V6a4.5 4.5 0 10-9 0zm1.5.75v-2.25a3 3 0 116 0v2.25H9zm.75 4.5a.75.75 0 01.75-.75h2.25a.75.75 0 010 1.5H10.5a.75.75 0 01-.75-.75zm.75 2.25a.75.75 0 000 1.5h2.25a.75.75 0 000-1.5H10.5z" clip-rule="evenodd" /></svg>
+                    </button>
+                    <button id="admin-mode-button" class="bg-amber-600 hover:bg-amber-700 text-white font-semibold py-2 px-3 rounded-full transition-colors duration-200 shadow-md flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                            <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="flex flex-col items-center">
+                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiw3gq3zQJK_-oayf6T9IDrfhfM0LGD05kLpPlHZuVs3P7SWg9qGFtWdhtXxb2VSqkwesgqhdwaRxoKw0p4k-G-JEsySw9lAY8U68CdMlsLiyyO4HtLm71WG_fkqUM6DGAOmRGZ1o8f37NdZramA0DrVefFUcSYUYFcZFmFxz1wWr7l89Vo4wYThYZjnb8/s1426/Logo%20Daiki%20x%20Bapa.png" alt="Logo Kopi Bapa x Roti Daiki" class="w-40 h-auto mb-4 mx-auto rounded-lg" />
+                    <h1 class="text-3xl font-bold text-center text-gray-800 dark:text-gray-100 mb-2">Kopi Bapa x Roti Daiki</h1>
+                </div>
+                <p class="text-center text-sm text-gray-500 dark:text-gray-400 mb-6">Pesan paket kolaborasi favorit Anda!</p>
+                
+                <!-- Product List -->
+                <div id="product-list" class="space-y-4 mb-6"></div>
 
-        function updateCarousel() {
-            track.style.transform = `translateX(-${currentSlide * 100}%)`;
+                <!-- Shopping Cart -->
+                <div class="border-t border-gray-200 dark:border-gray-700 pt-6">
+                    <h2 class="text-2xl font-bold mb-4">Keranjang Belanja</h2>
+                    <div id="cart-items" class="space-y-2 mb-4">
+                        <p id="empty-cart-message" class="text-center text-gray-500 dark:text-gray-400">Keranjang kosong.</p>
+                    </div>
+                    <div class="flex justify-between items-center font-bold text-lg mb-4">
+                        <span>Total:</span>
+                        <span id="cart-total">Rp 0</span>
+                    </div>
+
+                    <!-- Customer Info Form -->
+                    <div class="mb-4 space-y-2">
+                        <div>
+                            <label for="customer-name-input" class="block text-sm font-medium mb-1">Nama Pemesan</label>
+                            <input type="text" id="customer-name-input" class="w-full p-2 rounded-md border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100" placeholder="Masukkan nama Anda" />
+                        </div>
+                        <div>
+                            <label for="customer-wa-input" class="block text-sm font-medium mb-1">Nomor WA</label>
+                            <input type="text" id="customer-wa-input" class="w-full p-2 rounded-md border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100" placeholder="Masukkan nomor WhatsApp Anda" />
+                        </div>
+                        <!-- Payment Method Dropdown -->
+                        <div>
+                            <label for="payment-method-input" class="block text-sm font-medium mb-1">Metode Pembayaran</label>
+                            <select id="payment-method-input" class="w-full p-2 rounded-md border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100">
+                                ${paymentMethods.map(method => `<option value="${method}">${method}</option>`).join('')}
+                            </select>
+                        </div>
+                        <div id="payment-details" class="mt-4 p-4 rounded-lg bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-700"></div>
+                    </div>
+                    
+                    <button id="place-order-button" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold py-3 rounded-lg transition-colors duration-200 shadow-md">
+                        Pesan Sekarang
+                    </button>
+                </div>
+            `;
             
-            dots.forEach((dot, index) => {
-                dot.classList.toggle('active', index === currentSlide);
+            document.getElementById('admin-mode-button').addEventListener('click', () => {
+                adminModal.classList.remove('hidden');
+            });
+
+            document.getElementById('user-orders-button').addEventListener('click', () => {
+                userOrdersModal.classList.remove('hidden');
+                listenForUserOrders();
+            });
+
+            document.getElementById('place-order-button').addEventListener('click', placeOrder);
+            document.getElementById('payment-method-input').addEventListener('change', updatePaymentDetails);
+            closeUserOrdersModalButton.addEventListener('click', () => {
+                userOrdersModal.classList.add('hidden');
+            });
+
+            renderProductList();
+            renderCart();
+            updatePaymentDetails();
+        }
+
+        function renderAdminView() {
+            uiContent.innerHTML = `
+                <div class="flex justify-between items-center mb-4">
+                    <h1 class="text-3xl font-bold text-center text-gray-800 dark:text-gray-100">Panel Admin</h1>
+                    <button id="admin-mode-button" class="bg-amber-600 hover:bg-amber-700 text-white font-semibold py-2 px-4 rounded-full transition-colors duration-200 shadow-md">
+                        Keluar Admin
+                    </button>
+                </div>
+
+                <!-- Admin Tabs -->
+                <div class="flex border-b border-gray-200 dark:border-gray-700 mb-6">
+                    <button id="orders-tab" class="px-4 py-2 text-sm font-semibold border-b-2 ${activeAdminTab === 'orders' ? 'border-amber-600 text-amber-600' : 'border-transparent text-gray-500 hover:text-amber-600'} transition-colors duration-200">
+                        Pesanan
+                    </button>
+                    <button id="recap-tab" class="px-4 py-2 text-sm font-semibold border-b-2 ${activeAdminTab === 'recap' ? 'border-amber-600 text-amber-600' : 'border-transparent text-gray-500 hover:text-amber-600'} transition-colors duration-200">
+                        Rekapitulasi
+                    </button>
+                </div>
+                
+                <!-- Tab Content -->
+                <div id="admin-content" class="space-y-4"></div>
+            `;
+            
+            // Set up event listeners for the tabs
+            document.getElementById('orders-tab').addEventListener('click', () => {
+                activeAdminTab = 'orders';
+                renderAdminView(); // Re-render to show the orders list
+            });
+            document.getElementById('recap-tab').addEventListener('click', () => {
+                activeAdminTab = 'recap';
+                renderAdminView(); // Re-render to show the recap view
+            });
+
+            document.getElementById('admin-mode-button').addEventListener('click', () => {
+                isAdminMode = false;
+                renderCustomerView();
+            });
+
+            // Render content based on the active tab
+            if (activeAdminTab === 'orders') {
+                document.getElementById('admin-content').innerHTML = `<div id="orders-list" class="space-y-4"><p class="text-center text-gray-500 dark:text-gray-400">Memuat pesanan...</p></div>`;
+                listenForOrders();
+            } else if (activeAdminTab === 'recap') {
+                 document.getElementById('admin-content').innerHTML = `<div id="recap-list" class="space-y-4"><p class="text-center text-gray-500 dark:text-gray-400">Memuat rekapitulasi...</p></div>`;
+                 listenForRecap();
+            }
+        }
+
+        function renderProductList() {
+            const productList = document.getElementById('product-list');
+            productList.innerHTML = '';
+            products.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'p-4 bg-amber-100 dark:bg-neutral-700 rounded-lg shadow-sm flex items-center justify-between';
+                
+                const quantity = cart[product.id] ? cart[product.id].quantity : 0;
+                
+                productCard.innerHTML = `
+                    <div class="flex items-center">
+                        <img src="${product.imageUrl}" alt="Gambar ${product.name}" class="w-20 h-20 rounded-lg object-cover mr-4"/>
+                        <div class="flex-grow">
+                            <p class="font-semibold text-lg">${product.name}</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">${product.description}</p>
+                            <p class="font-bold text-base mt-1">Rp ${product.price.toLocaleString('id-ID')}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-2 ml-4">
+                        <button data-id="${product.id}" class="minus-button bg-neutral-200 dark:bg-neutral-600 text-gray-800 dark:text-gray-200 font-semibold py-1 px-3 rounded-full transition-colors duration-200 shadow-sm">
+                            -
+                        </button>
+                        <span class="quantity-display font-bold text-lg w-6 text-center">${quantity}</span>
+                        <button data-id="${product.id}" class="plus-button bg-amber-500 hover:bg-amber-600 text-white font-semibold py-1 px-3 rounded-full transition-colors duration-200 shadow-sm">
+                            +
+                        </button>
+                    </div>
+                `;
+                productList.appendChild(productCard);
+            });
+
+            document.querySelectorAll('.minus-button').forEach(button => {
+                button.addEventListener('click', decrementQuantity);
+            });
+            document.querySelectorAll('.plus-button').forEach(button => {
+                button.addEventListener('click', incrementQuantity);
             });
         }
 
-        function goToSlide(slideIndex) {
-            currentSlide = slideIndex;
-            updateCarousel();
+        function renderCart() {
+            const cartItems = document.getElementById('cart-items');
+            const cartTotalElement = document.getElementById('cart-total');
+            cartItems.innerHTML = '';
+            let total = 0;
+
+            if (Object.keys(cart).length === 0) {
+                cartItems.innerHTML = `<p id="empty-cart-message" class="text-center text-gray-500 dark:text-gray-400">Keranjang kosong.</p>`;
+            } else {
+                for (const productId in cart) {
+                    const item = cart[productId];
+                    const product = products.find(p => p.id === productId);
+                    if (product) {
+                        const itemElement = document.createElement('div');
+                        itemElement.className = 'flex justify-between items-center';
+                        itemElement.innerHTML = `
+                            <div>
+                                <p>${product.name} x ${item.quantity}</p>
+                                <!-- Dynamically create dropdowns for each coffee item -->
+                                ${product.hasCoffee ? `
+                                    <div class="mt-2 space-y-2 text-sm">
+                                        <p class="font-semibold">Pilih Varian Kopi:</p>
+                                        <div id="coffee-variants-${productId}" class="space-y-1"></div>
+                                    </div>
+                                ` : ''}
+                            </div>
+                            <p>Rp ${(product.price * item.quantity).toLocaleString('id-ID')}</p>
+                        `;
+                        cartItems.appendChild(itemElement);
+
+                        // If the product has coffee, render the dropdowns
+                        if (product.hasCoffee) {
+                            const variantContainer = document.getElementById(`coffee-variants-${productId}`);
+                            for (let i = 0; i < item.quantity; i++) {
+                                const selectId = `variant-${productId}-${i}`;
+                                const selectElement = document.createElement('select');
+                                selectElement.id = selectId;
+                                selectElement.className = 'w-full p-2 rounded-md border border-neutral-300 dark:border-neutral-600 dark:bg-neutral-700 dark:text-neutral-100';
+                                
+                                coffeeVariants.forEach(variant => {
+                                    const option = document.createElement('option');
+                                    option.value = variant;
+                                    option.textContent = variant;
+                                    selectElement.appendChild(option);
+                                });
+
+                                // Set initial value from cart data if it exists
+                                if (item.variants && item.variants[i]) {
+                                    selectElement.value = item.variants[i];
+                                }
+
+                                selectElement.addEventListener('change', (e) => {
+                                    if (!cart[productId].variants) {
+                                        cart[productId].variants = new Array(cart[productId].quantity).fill(coffeeVariants[0]);
+                                    }
+                                    cart[productId].variants[i] = e.target.value;
+                                });
+                                variantContainer.appendChild(selectElement);
+                            }
+                        }
+                        total += product.price * item.quantity;
+                    }
+                }
+            }
+            cartTotalElement.textContent = `Rp ${total.toLocaleString('id-ID')}`;
         }
 
-        function nextSlide() {
-            currentSlide = (currentSlide + 1) % totalSlides;
-            updateCarousel();
+        // Function to update the payment details section
+        function updatePaymentDetails() {
+            const paymentMethod = document.getElementById('payment-method-input').value;
+            const detailsContainer = document.getElementById('payment-details');
+            
+            let content = '';
+            if (paymentMethod === 'QRIS') {
+                content = `
+                    <p class="font-bold text-lg mb-2">Scan untuk Bayar</p>
+                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhjRWu6LKcdUq0Gy-6EdRwIOTAcG3xbG9GHVe8oqZU86kmZOJDspYyu1XSUJW4uClqOV0Tq_n-UI0Votuu1c_TmtQR44cC_Bb2a2_GWYdGzZ3cHFbe1DXxbI0JIWIPEPtpnYisyN7Dy0MWB5smEEhhBEkAVsB9QMX2dszttN532FLcE-kD7_SLbnx1yPnU/s614/QRIS%20DAIKI.jpg" alt="QRIS Code" class="w-[200px] h-auto rounded-lg mx-auto" />
+                `;
+            } else if (paymentMethod === 'Transfer') {
+                content = `
+                    <p class="font-bold text-lg mb-2">Detail Transfer Bank</p>
+                    <p class="text-sm">Bank: Bank Permata Syariah</p>
+                    <p class="text-sm">No.Rek: 9925684055</p>
+                    <p class="text-sm">a.n: Achmad Ghozali</p>
+                `;
+            } else {
+                content = `<p class="text-sm text-center text-gray-500 dark:text-gray-400">Pembayaran dilakukan secara tunai saat pesanan diterima.</p>`;
+            }
+
+            detailsContainer.innerHTML = content;
+        }
+        
+        // --- Data & Interaction Functions ---
+        function incrementQuantity(event) {
+            const productId = event.target.dataset.id;
+            const product = products.find(p => p.id === productId);
+            if (cart[productId]) {
+                cart[productId].quantity++;
+            } else {
+                cart[productId] = { quantity: 1 };
+                if (product.hasCoffee) {
+                     cart[productId].variants = [coffeeVariants[0]];
+                }
+            }
+
+            // If a coffee product, ensure a new variant placeholder is added
+            if (product.hasCoffee) {
+                if (!cart[productId].variants) {
+                    cart[productId].variants = [];
+                }
+                // Add a new variant placeholder if the quantity increases
+                while (cart[productId].variants.length < cart[productId].quantity) {
+                    cart[productId].variants.push(coffeeVariants[0]);
+                }
+            }
+
+            renderProductList(); // Re-render product list to update quantity display
+            renderCart();
         }
 
-        function prevSlide() {
-            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
-            updateCarousel();
+        function decrementQuantity(event) {
+            const productId = event.target.dataset.id;
+            const product = products.find(p => p.id === productId);
+            if (cart[productId]) {
+                cart[productId].quantity--;
+                if (cart[productId].quantity <= 0) {
+                    delete cart[productId];
+                } else if (product.hasCoffee) {
+                    // Remove the last variant when quantity decreases
+                    cart[productId].variants.pop();
+                }
+            }
+            renderProductList(); // Re-render product list to update quantity display
+            renderCart();
         }
 
-        // Image popup functionality
-        function openImagePopup(src, alt) {
-            const popup = document.getElementById('imagePopupOverlay');
-            const img = document.getElementById('popupImage');
-            img.src = src;
-            img.alt = alt;
-            popup.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
+
+        async function placeOrder() {
+            const customerName = document.getElementById('customer-name-input').value.trim();
+            const customerWa = document.getElementById('customer-wa-input').value.trim();
+            const paymentMethod = document.getElementById('payment-method-input').value;
+
+            if (Object.keys(cart).length === 0) {
+                alert("Keranjang Anda kosong. Silakan tambahkan produk.");
+                return;
+            }
+            if (!customerName || !customerWa) {
+                alert("Silakan lengkapi Nama Pemesan dan Nomor WA.");
+                return;
+            }
+
+            const order = {
+                items: cart,
+                total: calculateTotal(),
+                customerName: customerName,
+                customerWa: customerWa,
+                paymentMethod: paymentMethod,
+                status: 'pending',
+                customerId: userId,
+                timestamp: Date.now()
+            };
+
+            try {
+                const ordersCollectionPath = `/artifacts/${appId}/public/data/orders`;
+                await addDoc(collection(db, ordersCollectionPath), order);
+                cart = {}; // Clear cart
+                document.getElementById('customer-name-input').value = '';
+                document.getElementById('customer-wa-input').value = '';
+                renderCart();
+                renderProductList();
+                alert("Pesanan berhasil dibuat! Admin akan segera menghubungi Anda.");
+            } catch (e) {
+                console.error("Gagal membuat pesanan:", e);
+                alert("Gagal membuat pesanan. Silakan coba lagi.");
+            }
         }
 
-        function closeImagePopup() {
-            document.getElementById('imagePopupOverlay').style.display = 'none';
-            document.body.style.overflow = 'auto';
+        function calculateTotal() {
+            let total = 0;
+            for (const productId in cart) {
+                const item = cart[productId];
+                const product = products.find(p => p.id === productId);
+                if (product) {
+                    total += product.price * item.quantity;
+                }
+            }
+            return total;
         }
 
-        // Close popups when clicking outside
-        document.getElementById('imagePopupOverlay').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeImagePopup();
+        // --- Admin Functions ---
+        async function listenForOrders() {
+            const ordersList = document.getElementById('orders-list');
+            const ordersCollectionPath = `/artifacts/${appId}/public/data/orders`;
+            
+            const q = query(collection(db, ordersCollectionPath));
+            
+            onSnapshot(q, (snapshot) => {
+                ordersList.innerHTML = '';
+                if (snapshot.empty) {
+                    ordersList.innerHTML = `<p class="text-center text-gray-500 dark:text-gray-400">Belum ada pesanan.</p>`;
+                    return;
+                }
+                
+                snapshot.forEach(doc => {
+                    const order = doc.data();
+                    const orderItem = document.createElement('div');
+                    orderItem.className = `p-4 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 transition-colors duration-200 ${order.status === 'completed' ? 'bg-green-100 dark:bg-green-900' : 'bg-yellow-100 dark:bg-yellow-900'}`;
+                    
+                    const total = order.total.toLocaleString('id-ID');
+                    const orderDate = new Date(order.timestamp).toLocaleString('id-ID');
+                    
+                    let itemsHtml = '';
+                    for (const productId in order.items) {
+                        const item = order.items[productId];
+                        const product = products.find(p => p.id === productId);
+                        if (product) {
+                            let variantsList = '';
+                            if (product.hasCoffee && item.variants) {
+                                variantsList = `<ul class="list-disc list-inside mt-1 text-xs">`;
+                                item.variants.forEach(variant => {
+                                    variantsList += `<li>${variant}</li>`;
+                                });
+                                variantsList += `</ul>`;
+                            }
+                            itemsHtml += `<li>${product.name} x ${item.quantity} ${variantsList}</li>`;
+                        }
+                    }
+
+                    orderItem.innerHTML = `
+                        <p class="font-bold text-lg mb-2">Pesanan #${doc.id.substring(0, 8)}</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Nama: ${order.customerName}</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Nomor WA: ${order.customerWa}</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Metode Pembayaran: ${order.paymentMethod}</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Pelanggan ID: ${order.customerId.substring(0, 5)}</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Tanggal: ${orderDate}</p>
+                        <ul class="list-disc list-inside mb-4">${itemsHtml}</ul>
+                        <p class="font-bold text-lg mb-4">Total: Rp ${total}</p>
+                        <p class="font-semibold text-sm mb-2">Status: ${order.status === 'completed' ? '✅ Selesai' : '⏳ Menunggu'}</p>
+                        ${order.status !== 'completed' ? `<button data-id="${doc.id}" class="complete-order-button bg-neutral-800 hover:bg-neutral-900 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200 shadow-sm w-full mb-2">Tandai Selesai</button>` : ''}
+                        <button data-id="${doc.id}" class="delete-order-button bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200 shadow-sm w-full">Hapus Pesanan</button>
+                    `;
+                    ordersList.appendChild(orderItem);
+                });
+
+                document.querySelectorAll('.complete-order-button').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const orderId = e.target.dataset.id;
+                        completeOrder(orderId);
+                    });
+                });
+                document.querySelectorAll('.delete-order-button').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const orderId = e.target.dataset.id;
+                        deleteOrder(orderId);
+                    });
+                });
+            });
+        }
+
+        async function completeOrder(orderId) {
+            const orderDocRef = doc(db, `/artifacts/${appId}/public/data/orders/${orderId}`);
+            try {
+                await updateDoc(orderDocRef, {
+                    status: 'completed'
+                });
+                console.log("Pesanan berhasil ditandai sebagai selesai:", orderId);
+            } catch (e) {
+                console.error("Gagal memperbarui pesanan:", e);
+            }
+        }
+        
+        async function deleteOrder(orderId) {
+            const orderDocRef = doc(db, `/artifacts/${appId}/public/data/orders/${orderId}`);
+            try {
+                await deleteDoc(orderDocRef);
+                console.log("Pesanan berhasil dihapus:", orderId);
+            } catch (e) {
+                console.error("Gagal menghapus pesanan:", e);
+            }
+        }
+        
+        // --- Recap Functions ---
+        async function listenForRecap() {
+            const recapList = document.getElementById('recap-list');
+            const ordersCollectionPath = `/artifacts/${appId}/public/data/orders`;
+            
+            const q = query(collection(db, ordersCollectionPath));
+            
+            onSnapshot(q, (snapshot) => {
+                const coffeeRecap = {};
+                const rotiRecap = {};
+                
+                if (snapshot.empty) {
+                    recapList.innerHTML = `<p class="text-center text-gray-500 dark:text-gray-400">Belum ada pesanan.</p>`;
+                    return;
+                }
+
+                snapshot.forEach(doc => {
+                    const order = doc.data();
+                    for (const productId in order.items) {
+                        const item = order.items[productId];
+                        const product = products.find(p => p.id === productId);
+
+                        if (product) {
+                            if (product.hasCoffee) {
+                                // Add to coffee recap
+                                if (item.variants) {
+                                    item.variants.forEach(variant => {
+                                        coffeeRecap[variant] = (coffeeRecap[variant] || 0) + 1;
+                                    });
+                                }
+                                // Add to roti recap
+                                if (product.rotiItems) {
+                                    product.rotiItems.forEach(roti => {
+                                        rotiRecap[roti.name] = (rotiRecap[roti.name] || 0) + (item.quantity * roti.qty);
+                                    });
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // Generate HTML for the recap view
+                let htmlContent = `
+                    <h3 class="text-xl font-bold mb-4 text-center">Rekapitulasi Item Terjual</h3>
+                    <div class="space-y-6">
+                        <!-- Coffee Recap -->
+                        <div>
+                            <h4 class="text-lg font-semibold mb-2">Varian Kopi</h4>
+                            ${Object.keys(coffeeRecap).length === 0 ? `<p class="text-gray-500">Belum ada varian kopi yang dipesan.</p>` : `
+                                <ul class="list-disc list-inside space-y-1">
+                                    ${Object.entries(coffeeRecap).map(([item, count]) => `
+                                        <li>${item} x ${count}</li>
+                                    `).join('')}
+                                </ul>
+                            `}
+                        </div>
+                        <!-- Roti Recap -->
+                        <div>
+                            <h4 class="text-lg font-semibold mb-2">Roti</h4>
+                            ${Object.keys(rotiRecap).length === 0 ? `<p class="text-gray-500">Belum ada roti yang dipesan.</p>` : `
+                                <ul class="list-disc list-inside space-y-1">
+                                    ${Object.entries(rotiRecap).map(([item, count]) => `
+                                        <li>${item} x ${count}</li>
+                                    `).join('')}
+                                </ul>
+                            `}
+                        </div>
+                    </div>
+                `;
+
+                recapList.innerHTML = htmlContent;
+            });
+        }
+        
+        // --- User Order History Functions ---
+        async function listenForUserOrders() {
+            const userOrdersList = document.getElementById('user-orders-list');
+            if (!userId) {
+                userOrdersList.innerHTML = `<p class="text-center text-red-500">Gagal memuat riwayat. Silakan muat ulang.</p>`;
+                return;
+            }
+            
+            const ordersCollectionPath = `/artifacts/${appId}/public/data/orders`;
+            const q = query(collection(db, ordersCollectionPath), where("customerId", "==", userId));
+
+            onSnapshot(q, (snapshot) => {
+                userOrdersList.innerHTML = '';
+                if (snapshot.empty) {
+                    userOrdersList.innerHTML = `<p class="text-center text-gray-500 dark:text-gray-400">Anda belum membuat pesanan.</p>`;
+                    return;
+                }
+                
+                snapshot.forEach(doc => {
+                    const order = doc.data();
+                    const orderItem = document.createElement('div');
+                    orderItem.className = `p-4 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 transition-colors duration-200 ${order.status === 'completed' ? 'bg-green-100 dark:bg-green-900' : 'bg-yellow-100 dark:bg-yellow-900'}`;
+                    
+                    const total = order.total.toLocaleString('id-ID');
+                    const orderDate = new Date(order.timestamp).toLocaleString('id-ID');
+                    
+                    let itemsHtml = '';
+                    for (const productId in order.items) {
+                        const item = order.items[productId];
+                        const product = products.find(p => p.id === productId);
+                        if (product) {
+                            let variantsList = '';
+                            if (product.hasCoffee && item.variants) {
+                                variantsList = `<ul class="list-disc list-inside mt-1 text-xs">`;
+                                item.variants.forEach(variant => {
+                                    variantsList += `<li>${variant}</li>`;
+                                });
+                                variantsList += `</ul>`;
+                            }
+                            itemsHtml += `<li>${product.name} x ${item.quantity} ${variantsList}</li>`;
+                        }
+                    }
+
+                    orderItem.innerHTML = `
+                        <p class="font-bold text-lg mb-2">Pesanan #${doc.id.substring(0, 8)}</p>
+                        <ul class="list-disc list-inside mb-4">${itemsHtml}</ul>
+                        <p class="font-bold text-lg mb-4">Total: Rp ${total}</p>
+                        <p class="font-semibold text-sm mb-2">Status: ${order.status === 'completed' ? '✅ Selesai' : '⏳ Menunggu'}</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">Tanggal: ${orderDate}</p>
+                    `;
+                    userOrdersList.appendChild(orderItem);
+                });
+            });
+        }
+        
+        // --- Admin Login Logic ---
+        loginSubmitButton.addEventListener('click', () => {
+            const id = adminIdInput.value.trim();
+            const code = adminCodeInput.value.trim();
+
+            if (id === ADMIN_ID && code === ADMIN_CODE) {
+                loginMessage.textContent = "Berhasil masuk!";
+                loginMessage.classList.add('text-green-500');
+                loginMessage.classList.remove('text-red-500');
+                
+                setTimeout(() => {
+                    adminModal.classList.add('hidden');
+                    loginMessage.textContent = '';
+                    isAdminMode = true;
+                    activeAdminTab = 'orders'; // Reset to orders tab on login
+                    renderAdminView();
+                }, 1000); // Hide modal after 1 second
+            } else {
+                loginMessage.textContent = "ID atau Kode salah.";
+                loginMessage.classList.add('text-red-500');
+                loginMessage.classList.remove('text-green-500');
             }
         });
 
-        // Initialize countdown
-        updateCountdown();
-        setInterval(updateCountdown, 1000);
+        closeAdminModalButton.addEventListener('click', () => {
+            adminModal.classList.add('hidden');
+            adminIdInput.value = '';
+            adminCodeInput.value = '';
+            loginMessage.textContent = '';
+        });
 
-        // Initialize carousel
-        updateCarousel();
+        // Initialize the app on load
+        window.onload = initializeFirebase;
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96b9e863f1dde78d',t:'MTc1NDYwMjU2OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</body>
 </html>
