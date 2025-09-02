@@ -62,6 +62,15 @@
         </div>
     </div>
     
+    <!-- General Alert Modal -->
+    <div id="alert-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden modal-overlay">
+        <div class="bg-white dark:bg-stone-800 p-8 rounded-xl shadow-2xl w-full max-w-sm mx-4 text-center">
+            <h3 class="text-xl font-bold mb-4" id="alert-message-title">Peringatan</h3>
+            <p class="mb-6" id="alert-message-text"></p>
+            <button id="close-alert-modal" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold py-2 px-4 rounded-md">Tutup</button>
+        </div>
+    </div>
+
     <script type="module">
         // Import Firebase libraries
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
@@ -69,16 +78,28 @@
         import { getFirestore, collection, addDoc, query, onSnapshot, updateDoc, doc, where, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // Global variables provided by the Canvas environment
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+        const appId = 'default-app-id'; // This ID is used for the database path and should be a unique identifier for your app
+
+        // PASTE KONFIGURASI FIREBASE ANDA DI SINI
+        // Ganti objek di bawah ini dengan konfigurasi Firebase pribadi Anda dari konsol Firebase.
+        // Hapus baris 'const firebaseConfig = ...' yang ada di sini jika Anda sudah menempelkannya.
+        const firebaseConfig = {
+  apiKey: "AIzaSyDO6OaqmYpAWfOmtsRg_g1yC_WO2J2gXOI",
+  authDomain: "test-project-dc4c4.firebaseapp.com",
+  projectId: "test-project-dc4c4",
+  storageBucket: "test-project-dc4c4.firebasestorage.app",
+  messagingSenderId: "42493897694",
+  appId: "1:42493897694:web:a29260c37485c02ccb8b4f",
+  measurementId: "G-3BDGHJR2LT"
+};
+        
+        const initialAuthToken = null; // Ini hanya digunakan untuk lingkungan khusus
 
         // Hardcoded admin credentials for demonstration
         const ADMIN_ID = 'Admin';
         const ADMIN_CODE = '4567';
 
         // Get DOM elements
-        const appContainer = document.getElementById('app-container');
         const uiContent = document.getElementById('ui-content');
         const adminModal = document.getElementById('admin-modal');
         const adminIdInput = document.getElementById('admin-id-input');
@@ -121,40 +142,50 @@
             'Transfer',
             'QRIS'
         ];
+        
+        function showAlert(message) {
+            const alertModal = document.getElementById('alert-modal');
+            const alertMessageText = document.getElementById('alert-message-text');
+            const closeAlertModalButton = document.getElementById('close-alert-modal');
+            alertMessageText.textContent = message;
+            alertModal.classList.remove('hidden');
+            closeAlertModalButton.onclick = () => alertModal.classList.add('hidden');
+        }
 
         // Function to initialize Firebase
         async function initializeFirebase() {
             try {
-                if (Object.keys(firebaseConfig).length > 0) {
-                    app = initializeApp(firebaseConfig);
-                    db = getFirestore(app);
-                    auth = getAuth(app);
-                    onAuthStateChanged(auth, async (user) => {
-                        if (user) {
-                            userId = user.uid;
-                            renderCustomerView(); // Start with customer view
-                            console.log("Pengguna terotentikasi:", userId);
-                        } else {
-                            console.log("Pengguna tidak terotentikasi, mencoba masuk secara anonim atau dengan token.");
-                            try {
-                                if (initialAuthToken) {
-                                    await signInWithCustomToken(auth, initialAuthToken);
-                                } else {
-                                    await signInAnonymously(auth);
-                                }
-                            } catch (error) {
-                                console.error("Gagal masuk:", error);
-                                uiContent.innerHTML = `<p class="text-center text-red-500">Kesalahan otentikasi. Silakan coba muat ulang.</p>`;
-                            }
-                        }
-                    });
-                } else {
-                    console.error("Firebase config tidak tersedia.");
-                    uiContent.innerHTML = `<p class="text-center text-red-500">Kesalahan: Konfigurasi Firebase tidak ditemukan.</p>`;
+                if (!firebaseConfig.apiKey || firebaseConfig.apiKey.startsWith('...')) {
+                    showAlert("Kesalahan: Anda belum memasukkan konfigurasi Firebase Anda. Silakan ikuti petunjuk di dalam kode.");
+                    return;
                 }
+                
+                app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+                
+                onAuthStateChanged(auth, async (user) => {
+                    if (user) {
+                        userId = user.uid;
+                        renderCustomerView();
+                        console.log("Pengguna terotentikasi:", userId);
+                    } else {
+                        console.log("Pengguna tidak terotentikasi, mencoba masuk secara anonim atau dengan token.");
+                        try {
+                            if (initialAuthToken) {
+                                await signInWithCustomToken(auth, initialAuthToken);
+                            } else {
+                                await signInAnonymously(auth);
+                            }
+                        } catch (error) {
+                            console.error("Gagal masuk:", error);
+                            showAlert("Kesalahan otentikasi. Silakan coba muat ulang.");
+                        }
+                    }
+                });
             } catch (e) {
                 console.error("Gagal menginisialisasi Firebase:", e);
-                uiContent.innerHTML = `<p class="text-center text-red-500">Kesalahan: Gagal menginisialisasi Firebase.</p>`;
+                showAlert("Kesalahan: Gagal menginisialisasi Firebase. Pastikan konfigurasi Anda benar.");
             }
         }
 
@@ -467,11 +498,11 @@
             const paymentMethod = document.getElementById('payment-method-input').value;
 
             if (Object.keys(cart).length === 0) {
-                alert("Keranjang Anda kosong. Silakan tambahkan produk.");
+                showAlert("Keranjang Anda kosong. Silakan tambahkan produk.");
                 return;
             }
             if (!customerName || !customerWa) {
-                alert("Silakan lengkapi Nama Pemesan dan Nomor WA.");
+                showAlert("Silakan lengkapi Nama Pemesan dan Nomor WA.");
                 return;
             }
 
@@ -494,10 +525,10 @@
                 document.getElementById('customer-wa-input').value = '';
                 renderCart();
                 renderProductList();
-                alert("Pesanan berhasil dibuat! Admin akan segera menghubungi Anda.");
+                showAlert("Pesanan berhasil dibuat! Admin akan segera menghubungi Anda.");
             } catch (e) {
                 console.error("Gagal membuat pesanan:", e);
-                alert("Gagal membuat pesanan. Silakan coba lagi.");
+                showAlert("Gagal membuat pesanan. Silakan coba lagi.");
             }
         }
 
