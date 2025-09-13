@@ -25,6 +25,17 @@
         </div>
     </div>
 
+    <!-- Modal Konfirmasi Pesanan (hidden by default) -->
+    <div id="order-success-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden modal-overlay">
+        <div class="bg-white dark:bg-stone-800 p-8 rounded-xl shadow-2xl w-full max-w-sm mx-4 text-center">
+            <h2 class="text-2xl font-bold mb-4 text-green-600">Pesanan Berhasil!</h2>
+            <p class="mb-6">Pesanan Anda telah berhasil dibuat. Silakan cek riwayat pesanan Anda.</p>
+            <button id="close-order-success-modal" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold py-2 px-4 rounded-md transition-colors duration-200">
+                Tutup
+            </button>
+        </div>
+    </div>
+
     <!-- Modal Login Admin (hidden by default) -->
     <div id="admin-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden modal-overlay">
         <div class="bg-white dark:bg-stone-800 p-8 rounded-xl shadow-2xl w-full max-w-sm mx-4">
@@ -52,11 +63,46 @@
     <!-- Modal User Orders (hidden by default) -->
     <div id="user-orders-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden modal-overlay">
         <div class="bg-white dark:bg-stone-800 p-8 rounded-xl shadow-2xl w-full max-w-lg mx-4 max-h-[80vh] overflow-y-auto">
-            <h2 class="text-2xl font-bold text-center mb-4">Riwayat Pesanan Anda</h2>
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold">Riwayat Pesanan Anda</h2>
+                <button id="show-payment-info" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-md transition-colors duration-200">
+                    Cara Bayar
+                </button>
+            </div>
             <div id="user-orders-list" class="space-y-4 mb-4">
                 <p class="text-center text-gray-500 dark:text-gray-400">Memuat riwayat pesanan...</p>
             </div>
             <button id="close-user-orders-modal" class="w-full bg-neutral-800 hover:bg-neutral-900 text-white font-semibold py-2 px-4 rounded-md transition-colors duration-200">
+                Tutup
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal Payment Info (new) -->
+    <div id="payment-info-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden modal-overlay">
+        <div class="bg-white dark:bg-stone-800 p-8 rounded-xl shadow-2xl w-full max-w-sm mx-4 max-h-[80vh] overflow-y-auto">
+            <h2 class="text-2xl font-bold text-center mb-4">Informasi Pembayaran</h2>
+            <div class="space-y-6">
+                <!-- Tab Tunai -->
+                <div id="payment-tunai-info">
+                    <h3 class="text-xl font-bold mb-2">Tunai</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Pembayaran dilakukan secara tunai saat pesanan diterima.</p>
+                </div>
+                <!-- Tab Transfer -->
+                <div id="payment-transfer-info">
+                    <h3 class="text-xl font-bold mb-2">Transfer</h3>
+                    <p class="text-sm">Bank: Bank Permata Syariah</p>
+                    <p class="text-sm">No.Rek: 9925684055</p>
+                    <p class="text-sm">a.n: Achmad Ghozali</p>
+                </div>
+                <!-- Tab QRIS -->
+                <div id="payment-qris-info">
+                    <h3 class="text-xl font-bold mb-2">QRIS</h3>
+                    <p class="mb-2">Scan untuk Bayar</p>
+                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhjRWu6LKcdUq0Gy-6EdRwIOTAcG3xbG9GHVe8oqZU86kmZOJDspYyu1XSUJW4uClqOV0Tq_n-UI0Votuu1c_TmtQR44cC_Bb2a2_GWYdGzZ3cHFbe1DXxbI0JIWIPEPtpnYisyN7Dy0MWB5smEEhhBEkAVsB9QMX2dszttN532FLcE-kD7_SLbnx1yPnU/s614/QRIS%20DAIKI.jpg" alt="QRIS Code" class="w-full h-auto max-w-[200px] mx-auto rounded-lg" />
+                </div>
+            </div>
+            <button id="close-payment-info-modal" class="w-full mt-6 bg-neutral-800 hover:bg-neutral-900 text-white font-semibold py-2 px-4 rounded-md transition-colors duration-200">
                 Tutup
             </button>
         </div>
@@ -66,7 +112,7 @@
         // Import Firebase libraries
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, query, onSnapshot, updateDoc, doc, where, getDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, query, onSnapshot, updateDoc, doc, where, getDoc, setDoc, deleteDoc, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // Global variables provided by the Canvas environment
         const appId = 'default-app-id'; // This ID is used for the database path and should be a unique identifier for your app
@@ -76,7 +122,6 @@
         // PENTING: Ganti objek 'firebaseConfig' di bawah ini dengan konfigurasi pribadi Anda
         // dari konsol Firebase. Ini adalah penyebab error yang Anda alami.
         // =======================================================================================
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyDO6OaqmYpAWfOmtsRg_g1yC_WO2J2gXOI",
   authDomain: "test-project-dc4c4.firebaseapp.com",
@@ -104,18 +149,23 @@ const firebaseConfig = {
         const closeAdminModalButton = document.getElementById('close-admin-modal');
         const userOrdersModal = document.getElementById('user-orders-modal');
         const closeUserOrdersModalButton = document.getElementById('close-user-orders-modal');
-
+        const orderSuccessModal = document.getElementById('order-success-modal');
+        const closeOrderSuccessModalButton = document.getElementById('close-order-success-modal');
+        const paymentInfoModal = document.getElementById('payment-info-modal');
+        const closePaymentInfoModalButton = document.getElementById('close-payment-info-modal');
+        const showPaymentInfoButton = document.getElementById('show-payment-info');
+        
         let app, db, auth;
         let userId = null;
         let isAdminMode = false;
         let activeAdminTab = 'orders'; // 'orders' or 'recap'
         let cart = {};
-
+        
         // Hardcoded product data with coffee variant options
-        const products = [
+        let products = [
             // Perbaikan URL untuk PAKET CEMEN
             { id: '1', name: 'PAKET CEMEN', price: 17500, description: 'Kopi 200ml, 1 Mini Cheese', imageUrl: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjpSsaw3HnXAhY9Cp1rGm8kAl9ugaAbSSpGiMJUE78D8Hx4P67gTFq5cRLB93SeWzkq_SMiv90U1zfwxY9AqCxLEGWhQsZLWdCINW5ZHIichh6PN2k9aCa7c1LrjbeHihZKgCLUNkpH_TZQ9mV2q8zBrkllLnROOSHilbHp_T1IIrxUZCTuXrsyFV69QIU/s1500/3.png', hasCoffee: true, rotiItems: [{ name: 'Mini Cheese', qty: 1 }] },
-            { id: '2', name: 'PAKET GENTLEMENT', price: 22500, description: 'Kopi 200ml, 1 Mini Cheese, 1 Mini Choco', imageUrl: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjbNsBOvaQxhzAm5_bR25btq2sUC-l2_CDM078Kof5SrAPpmv3vMKUTuPMDXL84C53826k3Y3nNjkA3RwgtqZm2YTWU1Uz-KzNR6O3E9LkfMhC2C8jzTYj3BUUa4Riofdn8gddCioEGtHy9Q4LuWV5OFbtfFeYzKtXsPJ08aWHtl0bN5cANtBnDRoRqiso/s1500/4.png', hasCoffee: true, rotiItems: [{ name: 'Mini Cheese', qty: 1 }, { name: 'Mini Choco', qty: 1 }] },
+            { id: '2', name: 'PAKET GENTLEMEN', price: 22500, description: 'Kopi 200ml, 1 Mini Cheese, 1 Mini Choco', imageUrl: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjbNsBOvaQxhzAm5_bR25btq2sUC-l2_CDM078Kof5SrAPpmv3vMKUTuPMDXL84C53826k3Y3nNjkA3RwgtqZm2YTWU1Uz-KzNR6O3E9LkfMhC2C8jzTYj3BUUa4Riofdn8gddCioEGtHy9Q4LuWV5OFbtfFeYzKtXsPJ08aWHtl0bN5cANtBnDRoRqiso/s1500/4.png', hasCoffee: true, rotiItems: [{ name: 'Mini Cheese', qty: 1 }, { name: 'Mini Choco', qty: 1 }] },
             { id: '3', name: 'PAKET SUPERMAN', price: 29000, description: 'Kopi 200ml, 1 Big Cheese', imageUrl: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjU3OSJXskAwgPj27p7qPdkh5g2dUTC45A-5MnyHP9ivkq54aO41gJV-wPU7Q_5H8mLcXah0dMB8WbBW2RTpHnWSzDGUCBRwG9d5MOMuq4prOaeH-uTkSkv7rL5Jn41va3EqWqmTPjE44bAdN2VVsCjSjHZZf_BlvBWfOdlwA0Okofn9j672RzpgDsn9rY/s1500/5.png', hasCoffee: true, rotiItems: [{ name: 'Big Cheese', qty: 1 }] },
             { id: '4', name: 'PAKET ULTRAMAN', price: 47000, description: 'Kopi 200ml, 1 Big Cheese, 1 Big Choco', imageUrl: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhNljFwDudPcKbiDziJMei2Vl7_fGeH7s9zAXY6SJ6iN-iR7I7rGHlQi-p5f97v7MKMknhL7tHvuHht4BsSvi_wjQv_GT9TDAMIr4NI5NX_ozbRoczpb6abeGHkygQwpuZcZtPaQd9M_iQ-OFxlYNKOo_mwREzSVty2thu_oTxjRyPuplW-WyKQE4nikLA/s1500/6.png', hasCoffee: true, rotiItems: [{ name: 'Big Cheese', qty: 1 }, { name: 'Big Choco', qty: 1 }] },
         ];
@@ -138,7 +188,7 @@ const firebaseConfig = {
             'Transfer',
             'QRIS'
         ];
-
+        
         // Function to initialize Firebase
         async function initializeFirebase() {
             try {
@@ -179,10 +229,12 @@ const firebaseConfig = {
         // --- View Rendering Functions ---
         function renderCustomerView() {
             uiContent.innerHTML = `
-                <div class="flex justify-between mb-4">
+                <div class="flex justify-between items-center mb-4">
                     <button id="user-orders-button" class="relative bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-3 rounded-full transition-colors duration-200 shadow-md flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path fill-rule="evenodd" d="M7.5 6v.75H5.513c-.96 0-1.75.79-1.75 1.75v10.5c0 .96.79 1.75 1.75 1.75h12.974c.96 0 1.75-.79 1.75-1.75V8.513c0-.96-.79-1.75-1.75-1.75H16.5V6a4.5 4.5 0 10-9 0zm1.5.75v-2.25a3 3 0 116 0v2.25H9zm.75 4.5a.75.75 0 01.75-.75h2.25a.75.75 0 010 1.5H10.5a.75.75 0 01-.75-.75zm.75 2.25a.75.75 0 000 1.5h2.25a.75.75 0 000-1.5H10.5z" clip-rule="evenodd" /></svg>
-                        <span id="orders-badge" class="absolute -top-1 -right-1 flex items-center justify-center h-5 w-5 rounded-full bg-red-500 text-xs font-bold text-white leading-none"></span>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                            <path fill-rule="evenodd" d="M7.5 6v.75H5.513c-.96 0-1.75.79-1.75 1.75v10.5c0 .96.79 1.75 1.75 1.75h12.974c.96 0 1.75-.79 1.75-1.75V8.513c0-.96-.79-1.75-1.75-1.75H16.5V6a4.5 4.5 0 10-9 0zm1.5.75v-2.25a3 3 0 116 0v2.25H9zm.75 4.5a.75.75 0 01.75-.75h2.25a.75.75 0 010 1.5H10.5a.75.75 0 01-.75-.75zm.75 2.25a.75.75 0 000 1.5h2.25a.75.75 0 000-1.5H10.5z" clip-rule="evenodd" />
+                        </svg>
+                        <span id="orders-badge" class="absolute top-0 right-0 -mt-1 -mr-1 flex items-center justify-center h-5 w-5 rounded-full bg-red-500 text-xs font-bold text-white leading-none hidden"></span>
                     </button>
                     <button id="admin-mode-button" class="bg-amber-600 hover:bg-amber-700 text-white font-semibold py-2 px-3 rounded-full transition-colors duration-200 shadow-md flex items-center justify-center">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
@@ -192,7 +244,7 @@ const firebaseConfig = {
                 </div>
                 <div class="flex flex-col items-center">
                     <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiw3gq3zQJK_-oayf6T9IDrfhfM0LGD05kLpPlHZuVs3P7SWg9qGFtWdhtXxb2VSqkwesgqhdwaRxoKw0p4k-G-JEsySw9lAY8U68CdMlsLiyyO4HtLm71WG_fkqUM6DGAOmRGZ1o8f37NdZramA0DrVefFUcSYUYFcZFmFxz1wWr7l89Vo4wYThYZjnb8/s1426/Logo%20Daiki%20x%20Bapa.png" alt="Logo Kopi Bapa x Roti Daiki" class="w-40 h-auto mb-4 mx-auto rounded-lg" />
-                    <h1 class="text-2xl font-bold text-center text-gray-800 dark:text-gray-100 mb-2">Kopi Bapa x Roti Daiki</h1>
+                    <h1 class="text-3xl font-bold text-center text-gray-800 dark:text-gray-100 mb-2">Kopi Bapa x Roti Daiki</h1>
                 </div>
                 <p class="text-center text-sm text-gray-500 dark:text-gray-400 mb-6">Pesan paket kolaborasi favorit Anda!</p>
                 
@@ -224,6 +276,7 @@ const firebaseConfig = {
                         <div>
                             <label for="payment-method-input" class="block text-sm font-medium mb-1">Metode Pembayaran</label>
                             <select id="payment-method-input" class="w-full p-2 rounded-md border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100">
+                                <option value="" disabled selected>Pilih metode pembayaran</option>
                                 ${paymentMethods.map(method => `<option value="${method}">${method}</option>`).join('')}
                             </select>
                         </div>
@@ -233,23 +286,19 @@ const firebaseConfig = {
                     <button id="place-order-button" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold py-3 rounded-lg transition-colors duration-200 shadow-md">
                         Pesan Sekarang
                     </button>
+                    <p id="closed-store-message" class="text-center text-red-500 mt-2 hidden">Toko Sedang Tutup</p>
                 </div>
             `;
             
             document.getElementById('admin-mode-button').addEventListener('click', () => {
                 adminModal.classList.remove('hidden');
             });
-
             document.getElementById('user-orders-button').addEventListener('click', () => {
-                userOrdersModal.classList.remove('hidden');
                 listenForUserOrders();
+                userOrdersModal.classList.remove('hidden');
             });
-
             document.getElementById('place-order-button').addEventListener('click', placeOrder);
             document.getElementById('payment-method-input').addEventListener('change', updatePaymentDetails);
-            closeUserOrdersModalButton.addEventListener('click', () => {
-                userOrdersModal.classList.add('hidden');
-            });
 
             renderProductList();
             renderCart();
@@ -273,6 +322,9 @@ const firebaseConfig = {
                     <button id="recap-tab" class="px-4 py-2 text-sm font-semibold border-b-2 ${activeAdminTab === 'recap' ? 'border-amber-600 text-amber-600' : 'border-transparent text-gray-500 hover:text-amber-600'} transition-colors duration-200">
                         Rekapitulasi
                     </button>
+                    <button id="settings-tab" class="px-4 py-2 text-sm font-semibold border-b-2 ${activeAdminTab === 'settings' ? 'border-amber-600 text-amber-600' : 'border-transparent text-gray-500 hover:text-amber-600'} transition-colors duration-200">
+                        Setting
+                    </button>
                 </div>
                 
                 <!-- Tab Content -->
@@ -288,6 +340,10 @@ const firebaseConfig = {
                 activeAdminTab = 'recap';
                 renderAdminView(); // Re-render to show the recap view
             });
+            document.getElementById('settings-tab').addEventListener('click', () => {
+                activeAdminTab = 'settings';
+                renderAdminView(); // Re-render to show the settings view
+            });
 
             document.getElementById('admin-mode-button').addEventListener('click', () => {
                 isAdminMode = false;
@@ -301,11 +357,146 @@ const firebaseConfig = {
             } else if (activeAdminTab === 'recap') {
                  document.getElementById('admin-content').innerHTML = `<div id="recap-list" class="space-y-4"><p class="text-center text-gray-500 dark:text-gray-400">Memuat rekapitulasi...</p></div>`;
                  listenForRecap();
+            } else if (activeAdminTab === 'settings') {
+                document.getElementById('admin-content').innerHTML = `<div id="settings-content"></div>`;
+                renderSettings();
             }
         }
+        
+        // Settings rendering and logic
+        async function renderSettings() {
+            const settingsContent = document.getElementById('settings-content');
+            
+            // Fetch initial settings from Firebase
+            const settingsDocRef = doc(db, `/artifacts/${appId}/public/data/settings/store`);
+            const settingsSnap = await getDoc(settingsDocRef);
+            let storeOpen = true; // Default to open
+            let currentProducts = JSON.parse(JSON.stringify(products)); // Deep copy initial products
 
+            if (settingsSnap.exists()) {
+                const settings = settingsSnap.data();
+                storeOpen = settings.storeOpen;
+                // Update product prices from settings if they exist
+                if (settings.products) {
+                    currentProducts = settings.products;
+                }
+            } else {
+                 // Save default settings if they don't exist
+                 await setDoc(settingsDocRef, { storeOpen: true, products: currentProducts });
+            }
+
+            settingsContent.innerHTML = `
+                <div class="space-y-6">
+                    <!-- Store Status Toggle -->
+                    <div class="flex items-center justify-between p-4 bg-gray-100 dark:bg-neutral-700 rounded-lg shadow-sm">
+                        <p class="font-bold text-lg">Status Toko</p>
+                        <label for="store-status-toggle" class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="store-status-toggle" class="sr-only peer" ${storeOpen ? 'checked' : ''}>
+                            <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-2 peer-focus:ring-amber-500 dark:bg-gray-600 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border after:border-gray-300 after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-amber-600"></div>
+                            <span id="store-status-label" class="ml-3 text-sm font-medium">${storeOpen ? 'Buka' : 'Tutup'}</span>
+                        </label>
+                    </div>
+
+                    <!-- Price Settings -->
+                    <div>
+                        <h3 class="font-bold text-lg mb-4">Pengaturan Harga Paket</h3>
+                        <div id="price-settings-list" class="space-y-4"></div>
+                    </div>
+                </div>
+            `;
+
+            const priceSettingsList = document.getElementById('price-settings-list');
+            currentProducts.forEach(product => {
+                const priceItem = document.createElement('div');
+                priceItem.className = 'flex items-center justify-between p-4 bg-gray-100 dark:bg-neutral-700 rounded-lg shadow-sm';
+                priceItem.innerHTML = `
+                    <p class="font-semibold">${product.name}</p>
+                    <input type="number" data-id="${product.id}" value="${product.price}" class="product-price-input w-24 p-2 rounded-md border border-gray-300 dark:border-gray-600 dark:bg-gray-800 text-right" />
+                `;
+                priceSettingsList.appendChild(priceItem);
+            });
+            
+            // Add a single listener for all price inputs
+            settingsContent.addEventListener('input', async (e) => {
+                if (e.target.classList.contains('product-price-input')) {
+                    const productId = e.target.dataset.id;
+                    const newPrice = parseInt(e.target.value);
+                    const productIndex = currentProducts.findIndex(p => p.id === productId);
+                    if (productIndex !== -1) {
+                        currentProducts[productIndex].price = newPrice;
+                        await setDoc(settingsDocRef, { products: currentProducts }, { merge: true });
+                    }
+                }
+            });
+
+            // Add event listener for store status toggle
+            const storeStatusToggle = document.getElementById('store-status-toggle');
+            storeStatusToggle.addEventListener('change', async (e) => {
+                const newStatus = e.target.checked;
+                await setDoc(settingsDocRef, { storeOpen: newStatus }, { merge: true });
+            });
+            
+            // Listen for real-time updates to settings
+            onSnapshot(settingsDocRef, (doc) => {
+                if (!doc.exists()) {
+                    return; // Document doesn't exist, maybe it was just created
+                }
+                const settings = doc.data();
+                if (settings) {
+                    // Update the local product list
+                    products = settings.products;
+
+                    // Update the UI elements without re-rendering the whole view
+                    const toggle = document.getElementById('store-status-toggle');
+                    const label = document.getElementById('store-status-label');
+                    if (toggle) {
+                        toggle.checked = settings.storeOpen;
+                    }
+                    if (label) {
+                        label.textContent = settings.storeOpen ? 'Buka' : 'Tutup';
+                    }
+
+                    document.querySelectorAll('.product-price-input').forEach(input => {
+                        const productId = input.dataset.id;
+                        const product = settings.products.find(p => p.id === productId);
+                        if (product) {
+                            input.value = product.price;
+                        }
+                    });
+
+                    // Update the customer view if necessary
+                    if (!isAdminMode) {
+                        renderCustomerView();
+                    }
+                }
+            });
+        }
+        
         function renderProductList() {
             const productList = document.getElementById('product-list');
+            const placeOrderButton = document.getElementById('place-order-button');
+            const closedStoreMessage = document.getElementById('closed-store-message');
+            
+            // Check store status from Firebase settings
+            const settingsDocRef = doc(db, `/artifacts/${appId}/public/data/settings/store`);
+            onSnapshot(settingsDocRef, (doc) => {
+                 let storeOpen = true;
+                 if (doc.exists()) {
+                     const settings = doc.data();
+                     storeOpen = settings.storeOpen;
+                 }
+                
+                if (storeOpen) {
+                    placeOrderButton.disabled = false;
+                    placeOrderButton.classList.remove('opacity-50', 'cursor-not-allowed');
+                    closedStoreMessage.classList.add('hidden');
+                } else {
+                    placeOrderButton.disabled = true;
+                    placeOrderButton.classList.add('opacity-50', 'cursor-not-allowed');
+                    closedStoreMessage.classList.remove('hidden');
+                }
+            });
+            
             productList.innerHTML = '';
             products.forEach(product => {
                 const productCard = document.createElement('div');
@@ -429,8 +620,10 @@ const firebaseConfig = {
                     <p class="text-sm">No.Rek: 9925684055</p>
                     <p class="text-sm">a.n: Achmad Ghozali</p>
                 `;
-            } else {
+            } else if (paymentMethod === 'Tunai') {
                 content = `<p class="text-sm text-center text-gray-500 dark:text-gray-400">Pembayaran dilakukan secara tunai saat pesanan diterima.</p>`;
+            } else {
+                content = ''; // This will handle the empty default state
             }
 
             detailsContainer.innerHTML = content;
@@ -488,8 +681,10 @@ const firebaseConfig = {
             cart = {};
             document.getElementById('customer-name-input').value = '';
             document.getElementById('customer-wa-input').value = '';
+            document.getElementById('payment-method-input').value = '';
             renderProductList();
             renderCart();
+            updatePaymentDetails();
         }
 
         async function saveCartToFirebase() {
@@ -534,11 +729,21 @@ const firebaseConfig = {
             const paymentMethod = document.getElementById('payment-method-input').value;
 
             if (Object.keys(cart).length === 0) {
-                console.error("Keranjang kosong.");
+                orderSuccessModal.querySelector('h2').textContent = "Keranjang Kosong";
+                orderSuccessModal.querySelector('p').textContent = "Silakan tambahkan item ke keranjang Anda sebelum memesan.";
+                orderSuccessModal.classList.remove('hidden');
                 return;
             }
             if (!customerName || !customerWa) {
-                console.error("Nama atau Nomor WA tidak boleh kosong.");
+                orderSuccessModal.querySelector('h2').textContent = "Data Kurang Lengkap";
+                orderSuccessModal.querySelector('p').textContent = "Nama dan Nomor WA tidak boleh kosong.";
+                orderSuccessModal.classList.remove('hidden');
+                return;
+            }
+            if (!paymentMethod) {
+                orderSuccessModal.querySelector('h2').textContent = "Metode Pembayaran Belum Dipilih";
+                orderSuccessModal.querySelector('p').textContent = "Silakan pilih metode pembayaran.";
+                orderSuccessModal.classList.remove('hidden');
                 return;
             }
 
@@ -561,10 +766,15 @@ const firebaseConfig = {
             } catch (e) {
                 console.error("Gagal membuat pesanan:", e);
             } finally {
-                // This block will always run, whether the `try` succeeds or the `catch` handles an error
-                resetFormAndCart(); 
+                orderSuccessModal.classList.remove('hidden');
+                resetFormAndCart();
             }
         }
+
+        closeOrderSuccessModalButton.addEventListener('click', () => {
+            orderSuccessModal.classList.add('hidden');
+        });
+
 
         function calculateTotal() {
             let total = 0;
@@ -583,7 +793,7 @@ const firebaseConfig = {
             const ordersList = document.getElementById('orders-list');
             const ordersCollectionPath = `/artifacts/${appId}/public/data/orders`;
             
-            const q = query(collection(db, ordersCollectionPath));
+            const q = query(collection(db, ordersCollectionPath), orderBy('timestamp', 'desc'));
             
             onSnapshot(q, (snapshot) => {
                 ordersList.innerHTML = '';
@@ -626,7 +836,7 @@ const firebaseConfig = {
                         <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Tanggal: ${orderDate}</p>
                         <ul class="list-disc list-inside mb-4">${itemsHtml}</ul>
                         <p class="font-bold text-lg mb-4">Total: Rp ${total}</p>
-                        <p class="font-semibold text-sm mb-2">Status: ${order.status === 'completed' ? '✅ Selesai' : '⏳ Menunggu'}</p>
+                        <p class="font-semibold text-sm mb-2">Status: ${order.status === 'completed' ? '✅ Pembayaran Diterima' : '⏳ Menunggu Konfirmasi'}</p>
                         ${order.status !== 'completed' ? `<button data-id="${doc.id}" class="complete-order-button bg-neutral-800 hover:bg-neutral-900 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200 shadow-sm w-full mb-2">Tandai Selesai</button>` : ''}
                         <button data-id="${doc.id}" class="delete-order-button bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200 shadow-sm w-full">Hapus Pesanan</button>
                     `;
@@ -680,7 +890,9 @@ const firebaseConfig = {
             onSnapshot(q, (snapshot) => {
                 const coffeeRecap = {};
                 const rotiRecap = {};
-                
+                const packageRecap = {}; // New object for package recap
+                let totalRevenue = 0; // New variable for total revenue
+
                 if (snapshot.empty) {
                     recapList.innerHTML = `<p class="text-center text-gray-500 dark:text-gray-400">Belum ada pesanan.</p>`;
                     return;
@@ -688,13 +900,18 @@ const firebaseConfig = {
 
                 snapshot.forEach(doc => {
                     const order = doc.data();
+                    totalRevenue += order.total; // Add order total to the total revenue
+                    
                     for (const productId in order.items) {
                         const item = order.items[productId];
                         const product = products.find(p => p.id === productId);
 
                         if (product) {
+                            // Add to package recap
+                            packageRecap[product.name] = (packageRecap[product.name] || 0) + item.quantity;
+
+                            // Add to coffee recap
                             if (product.hasCoffee) {
-                                // Add to coffee recap
                                 if (item.variants) {
                                     item.variants.forEach(variant => {
                                         coffeeRecap[variant] = (coffeeRecap[variant] || 0) + 1;
@@ -715,6 +932,22 @@ const firebaseConfig = {
                 let htmlContent = `
                     <h3 class="text-xl font-bold mb-4 text-center">Rekapitulasi Item Terjual</h3>
                     <div class="space-y-6">
+                        <!-- Total Revenue -->
+                        <div>
+                            <h4 class="text-lg font-semibold mb-2">Total Uang Terkumpul</h4>
+                            <p class="font-bold text-2xl text-green-600">Rp ${totalRevenue.toLocaleString('id-ID')}</p>
+                        </div>
+                        <!-- Package Recap -->
+                        <div>
+                            <h4 class="text-lg font-semibold mb-2">Jumlah Paket</h4>
+                            ${Object.keys(packageRecap).length === 0 ? `<p class="text-gray-500">Belum ada paket yang dipesan.</p>` : `
+                                <ul class="list-disc list-inside space-y-1">
+                                    ${Object.entries(packageRecap).map(([item, count]) => `
+                                        <li>${item} x ${count}</li>
+                                    `).join('')}
+                                </ul>
+                            `}
+                        </div>
                         <!-- Coffee Recap -->
                         <div>
                             <h4 class="text-lg font-semibold mb-2">Varian Kopi</h4>
@@ -754,13 +987,13 @@ const firebaseConfig = {
             const q = query(collection(db, ordersCollectionPath), where("customerId", "==", userId));
 
             onSnapshot(q, (snapshot) => {
-                const ordersBadge = document.getElementById('orders-badge');
+                const floatingBadge = document.getElementById('orders-badge');
                 if (snapshot.empty) {
-                    ordersBadge.textContent = '0';
-                    ordersBadge.classList.add('hidden');
+                    floatingBadge.textContent = '0';
+                    floatingBadge.classList.add('hidden');
                 } else {
-                    ordersBadge.textContent = snapshot.size;
-                    ordersBadge.classList.remove('hidden');
+                    floatingBadge.textContent = snapshot.size;
+                    floatingBadge.classList.remove('hidden');
                 }
             });
         }
@@ -811,7 +1044,7 @@ const firebaseConfig = {
                         <p class="font-bold text-lg mb-2">Pesanan #${doc.id.substring(0, 8)}</p>
                         <ul class="list-disc list-inside mb-4">${itemsHtml}</ul>
                         <p class="font-bold text-lg mb-4">Total: Rp ${total}</p>
-                        <p class="font-semibold text-sm mb-2">Status: ${order.status === 'completed' ? '✅ Selesai' : '⏳ Menunggu'}</p>
+                        <p class="font-semibold text-sm mb-2">Status: ${order.status === 'completed' ? '✅ Pembayaran Diterima' : '⏳ Menunggu Konfirmasi'}</p>
                         <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">Tanggal: ${orderDate}</p>
                     `;
                     userOrdersList.appendChild(orderItem);
@@ -849,10 +1082,25 @@ const firebaseConfig = {
             adminCodeInput.value = '';
             loginMessage.textContent = '';
         });
+        
+        // Add this event listener to the `window.onload` or similar setup block
+        closeUserOrdersModalButton.addEventListener('click', () => {
+            userOrdersModal.classList.add('hidden');
+        });
+        
+        // New event listeners for the payment info modal
+        showPaymentInfoButton.addEventListener('click', () => {
+            userOrdersModal.classList.add('hidden');
+            paymentInfoModal.classList.remove('hidden');
+        });
+        
+        closePaymentInfoModalButton.addEventListener('click', () => {
+            paymentInfoModal.classList.add('hidden');
+            userOrdersModal.classList.remove('hidden');
+        });
 
         // Initialize the app on load
         window.onload = initializeFirebase;
     </script>
 </body>
 </html>
-
