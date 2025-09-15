@@ -107,6 +107,11 @@
             </button>
         </div>
     </div>
+
+    <!-- Status feedback message (new) -->
+    <div id="status-message" class="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg hidden">
+        Harga berhasil disimpan!
+    </div>
     
     <script type="module">
         // Import Firebase libraries
@@ -154,7 +159,8 @@ const firebaseConfig = {
         const paymentInfoModal = document.getElementById('payment-info-modal');
         const closePaymentInfoModalButton = document.getElementById('close-payment-info-modal');
         const showPaymentInfoButton = document.getElementById('show-payment-info');
-        
+        const statusMessage = document.getElementById('status-message');
+
         let app, db, auth;
         let userId = null;
         let isAdminMode = false;
@@ -202,20 +208,25 @@ const firebaseConfig = {
                 db = getFirestore(app);
                 auth = getAuth(app);
                 
-                // Fetch settings first to ensure products are up-to-date
-                const settingsDocRef = doc(db, `/artifacts/${appId}/public/data/settings/store`);
-                const settingsSnap = await getDoc(settingsDocRef);
-                if (settingsSnap.exists()) {
-                    storeSettings = settingsSnap.data();
-                    products = storeSettings.products || products;
-                } else {
-                    // Save default settings if they don't exist
-                    await setDoc(settingsDocRef, { storeOpen: true, products: products });
-                }
-
                 onAuthStateChanged(auth, async (user) => {
                     if (user) {
                         userId = user.uid;
+                        // =================================================================
+                        // PERBAIKAN: Memindahkan inisialisasi pengaturan ke dalam
+                        // onAuthStateChanged untuk menghindari masalah izin.
+                        // =================================================================
+                        const settingsDocRef = doc(db, `/artifacts/${appId}/public/data/settings/store`);
+                        const settingsSnap = await getDoc(settingsDocRef);
+                        if (settingsSnap.exists()) {
+                            storeSettings = settingsSnap.data();
+                            products = storeSettings.products || products;
+                        } else {
+                            // Save default settings if they don't exist
+                            await setDoc(settingsDocRef, { storeOpen: true, products: products });
+                        }
+                        
+                        // Setelah otentikasi dan pengambilan data pengaturan selesai,
+                        // kita baru memuat tampilan.
                         await loadCartFromFirebase(); // Load the cart first
                         renderCustomerView();
                         listenForUserOrdersCount(); // Listen for order count on page load
@@ -436,7 +447,24 @@ const firebaseConfig = {
                     const productIndex = currentProducts.findIndex(p => p.id === productId);
                     if (productIndex !== -1) {
                         currentProducts[productIndex].price = newPrice;
-                        await setDoc(settingsDocRef, { products: currentProducts }, { merge: true });
+                        try {
+                            await setDoc(settingsDocRef, { products: currentProducts }, { merge: true });
+                            console.log(`Harga untuk ${currentProducts[productIndex].name} berhasil diperbarui.`);
+                            statusMessage.textContent = 'Harga berhasil disimpan!';
+                            statusMessage.classList.remove('hidden', 'bg-red-500');
+                            statusMessage.classList.add('bg-green-500');
+                            setTimeout(() => {
+                                statusMessage.classList.add('hidden');
+                            }, 3000);
+                        } catch (e) {
+                             console.error("Gagal menyimpan harga:", e);
+                             statusMessage.textContent = 'Gagal menyimpan harga!';
+                             statusMessage.classList.remove('hidden', 'bg-green-500');
+                             statusMessage.classList.add('bg-red-500');
+                             setTimeout(() => {
+                                 statusMessage.classList.add('hidden');
+                             }, 3000);
+                        }
                     }
                 }
             });
@@ -445,7 +473,23 @@ const firebaseConfig = {
             const storeStatusToggle = document.getElementById('store-status-toggle');
             storeStatusToggle.addEventListener('change', async (e) => {
                 const newStatus = e.target.checked;
-                await setDoc(settingsDocRef, { storeOpen: newStatus }, { merge: true });
+                try {
+                    await setDoc(settingsDocRef, { storeOpen: newStatus }, { merge: true });
+                    statusMessage.textContent = `Status toko berhasil diperbarui menjadi ${newStatus ? 'Buka' : 'Tutup'}.`;
+                    statusMessage.classList.remove('hidden', 'bg-red-500');
+                    statusMessage.classList.add('bg-green-500');
+                    setTimeout(() => {
+                        statusMessage.classList.add('hidden');
+                    }, 3000);
+                } catch (e) {
+                    console.error("Gagal memperbarui status toko:", e);
+                    statusMessage.textContent = 'Gagal memperbarui status toko!';
+                    statusMessage.classList.remove('hidden', 'bg-green-500');
+                    statusMessage.classList.add('bg-red-500');
+                    setTimeout(() => {
+                        statusMessage.classList.add('hidden');
+                    }, 3000);
+                }
             });
             
             // Listen for real-time updates to settings
