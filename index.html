@@ -160,6 +160,7 @@ const firebaseConfig = {
         let isAdminMode = false;
         let activeAdminTab = 'orders'; // 'orders' or 'recap'
         let cart = {};
+        let storeSettings = {};
         
         // Hardcoded product data with coffee variant options
         let products = [
@@ -201,6 +202,17 @@ const firebaseConfig = {
                 db = getFirestore(app);
                 auth = getAuth(app);
                 
+                // Fetch settings first to ensure products are up-to-date
+                const settingsDocRef = doc(db, `/artifacts/${appId}/public/data/settings/store`);
+                const settingsSnap = await getDoc(settingsDocRef);
+                if (settingsSnap.exists()) {
+                    storeSettings = settingsSnap.data();
+                    products = storeSettings.products || products;
+                } else {
+                    // Save default settings if they don't exist
+                    await setDoc(settingsDocRef, { storeOpen: true, products: products });
+                }
+
                 onAuthStateChanged(auth, async (user) => {
                     if (user) {
                         userId = user.uid;
