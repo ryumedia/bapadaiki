@@ -99,7 +99,7 @@
                 <div id="payment-qris-info">
                     <h3 class="text-xl font-bold mb-2">QRIS</h3>
                     <p class="mb-2">Scan untuk Bayar</p>
-                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhjRWu6LKcdUq0Gy-6EdRwIOTAcG3xbG9GHVe8oqZU86kmZOJDspYyu1XSUJW4uClqOV0Tq_n-UI0Votuu1c_TmtQR44cC_Bb2a2_GWYdGzZ3cHFbe1DXxbI0JIWIPEPtpnYisyN7Dy0MWB5smEEhhBEkAVsB9QMX2dszttN532FLcE-kD7_SLbnx1yPnU/s614/QRIS%20DAIKI.jpg" alt="QRIS Code" class="w-full h-auto max-w-[200px] mx-auto rounded-lg" />
+                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEghe9PP0_GXWOdEPWYs6rTc3vFvpvZT1vznK5kRWbAUWgWga4vF9u_aRxDrAch9m74_6Ha_smwKuiwfRTORM1fty-dCFJ8I654SSbWIidpSroENprWhYD_i0YhP3GbsWgIiDOvzp31iV6usQdzMGzkEUUkwZVonraBwMkUl2Kkp2rtU1El3khN9mTUVjZA/s1280/QRIS%20Gopay.jpg" alt="QRIS Code" class="w-full h-auto max-w-[200px] mx-auto rounded-lg" />
                 </div>
             </div>
             <button id="close-payment-info-modal" class="w-full mt-6 bg-neutral-800 hover:bg-neutral-900 text-white font-semibold py-2 px-4 rounded-md transition-colors duration-200">
@@ -667,7 +667,7 @@ const firebaseConfig = {
             if (paymentMethod === 'QRIS') {
                 content = `
                     <p class="font-bold text-lg mb-2">Scan untuk Bayar</p>
-                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhjRWu6LKcdUq0Gy-6EdRwIOTAcG3xbG9GHVe8oqZU86kmZOJDspYyu1XSUJW4uClqOV0Tq_n-UI0Votuu1c_TmtQR44cC_Bb2a2_GWYdGzZ3cHFbe1DXxbI0JIWIPEPtpnYisyN7Dy0MWB5smEEhhBEkAVsB9QMX2dszttN532FLcE-kD7_SLbnx1yPnU/s614/QRIS%20DAIKI.jpg" alt="QRIS Code" class="w-full h-auto max-w-[200px] mx-auto rounded-lg" />
+                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEghe9PP0_GXWOdEPWYs6rTc3vFvpvZT1vznK5kRWbAUWgWga4vF9u_aRxDrAch9m74_6Ha_smwKuiwfRTORM1fty-dCFJ8I654SSbWIidpSroENprWhYD_i0YhP3GbsWgIiDOvzp31iV6usQdzMGzkEUUkwZVonraBwMkUl2Kkp2rtU1El3khN9mTUVjZA/s1280/QRIS%20Gopay.jpg" alt="QRIS Code" class="w-full h-auto max-w-[200px] mx-auto rounded-lg" />
                 `;
             } else if (paymentMethod === 'Transfer') {
                 content = `
